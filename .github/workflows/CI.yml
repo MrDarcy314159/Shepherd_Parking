@@ -1,5 +1,5 @@
 # Name of the workflow
-name: Android CI
+name: Android CI with Instrumented Tests
 
 # Controls when the workflow will run
 on:
@@ -9,14 +9,10 @@ on:
   pull_request:
     branches:
       - master  # Run on pull requests to the master branch
-
-  # Allows you to trigger the workflow manually from the GitHub Actions tab
   workflow_dispatch:
 
-# A workflow run consists of jobs
 jobs:
   build:
-    # The type of runner (Ubuntu is used for building Android projects)
     runs-on: ubuntu-latest
 
     steps:
@@ -24,7 +20,7 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v4
 
-      # Step 2: Grant execute permissions for gradlew
+      # Step 2: Grant execute permission for gradlew
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
@@ -33,18 +29,19 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '17'  # You may need to update this based on your project requirements
+          java-version: '17'  # Set the required Java version for your project
 
-      # Step 4: Set up the Android SDK (required for building Android apps)
+      # Step 4: Set up the Android SDK
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2
         with:
-          api-level: 33  # Specify your target Android API level
-          build-tools-version: '33.0.0'  # Specify your project's build tools version
+          api-level: 33  # Specify your Android API level
+          build-tools-version: '33.0.0'
           components: |
             platform-tools
             build-tools;33.0.0
             android-33
+            system-images;android-33;default;x86_64  # System image required for the emulator
             extra-google-google_play_services
             extra-google-m2repository
             extra-android-m2repository
@@ -63,14 +60,35 @@ jobs:
       - name: Build the project
         run: ./gradlew build --stacktrace
 
-      # Step 7: Run Android Lint checks to catch code issues
+      # Step 7: Set up and start the Android Emulator
+      - name: Start Android Emulator
+        run: |
+          echo "Setting up Android Emulator"
+          adb devices
+          echo "Creating AVD"
+          echo no | avdmanager create avd -n test -k "system-images;android-33;default;x86_64" --force
+          $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window -gpu swiftshader_indirect &
+          adb wait-for-device
+          adb shell input keyevent 82
+
+      # Step 8: Wait for emulator to fully boot
+      - name: Wait for Emulator Boot
+        run: |
+          adb wait-for-device
+          adb shell getprop sys.boot_completed | grep -m 1 '1'
+
+      # Step 9: Run Android Lint checks
       - name: Run Lint checks
         run: ./gradlew lint
 
-      # Step 8: Run Unit Tests
+      # Step 10: Run Unit Tests
       - name: Run Unit Tests
         run: ./gradlew test
 
-      # Step 9: Run Instrumented UI Tests (requires Android emulator)
+      # Step 11: Run Instrumented UI Tests on Emulator
       - name: Run Instrumented Tests
         run: ./gradlew connectedAndroidTest
+
+      # Step 12: Kill the emulator after tests are done
+      - name: Shutdown Emulator
+        run: adb -s emulator-5554 emu kill
