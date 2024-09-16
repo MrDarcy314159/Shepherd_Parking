@@ -24,14 +24,18 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v4
 
-      # Step 2: Set up JDK for Android (necessary for Gradle to work)
+      # Step 2: Grant execute permissions for gradlew
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
+      # Step 3: Set up JDK for Android (necessary for Gradle to work)
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: '17'  # You may need to update this based on your project requirements
 
-      # Step 3: Set up the Android SDK (required for building Android apps)
+      # Step 4: Set up the Android SDK (required for building Android apps)
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2
         with:
@@ -45,7 +49,7 @@ jobs:
             extra-google-m2repository
             extra-android-m2repository
 
-      # Step 4: Cache Gradle dependencies to speed up future builds
+      # Step 5: Cache Gradle dependencies to speed up future builds
       - name: Cache Gradle dependencies
         uses: actions/cache@v3
         with:
@@ -55,18 +59,18 @@ jobs:
           key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: gradle-${{ runner.os }}-
 
-      # Step 5: Build the Android project
+      # Step 6: Build the Android project
       - name: Build the project
         run: ./gradlew build --stacktrace
 
-      # Step 6: Run Android Lint checks to catch code issues
+      # Step 7: Run Android Lint checks to catch code issues
       - name: Run Lint checks
         run: ./gradlew lint
 
-      # Step 7: Run Unit Tests
+      # Step 8: Run Unit Tests
       - name: Run Unit Tests
         run: ./gradlew test
 
-      # Step 8: Run Instrumented UI Tests (requires Android emulator)
+      # Step 9: Run Instrumented UI Tests (requires Android emulator)
       - name: Run Instrumented Tests
         run: ./gradlew connectedAndroidTest
