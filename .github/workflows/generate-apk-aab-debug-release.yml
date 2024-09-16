@@ -5,13 +5,13 @@ env:
   main_project_module: app
 
   # The name of the Play Store
-  playstore_name: Frogobox ID
+  playstore_name: IIECat
 
 on:
-
+#Where release is writen , must match your branch name , I would suggest cloning your branch  at the end called release so it only builds the final code called release
   push:
     branches:
-      - 'release/**'
+      - 'release'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
