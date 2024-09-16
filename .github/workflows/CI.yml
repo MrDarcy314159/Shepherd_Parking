@@ -1,74 +1,72 @@
+# Name of the workflow
 name: Android CI
 
+# Controls when the workflow will run
 on:
   push:
     branches:
-      - main
+      - master  # Run on pushes to the master branch
   pull_request:
     branches:
-      - main
+      - master  # Run on pull requests to the master branch
 
+  # Allows you to trigger the workflow manually from the GitHub Actions tab
+  workflow_dispatch:
+
+# A workflow run consists of jobs
 jobs:
   build:
+    # The type of runner (Ubuntu is used for building Android projects)
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout the code from the repository
-    - name: Checkout Code
-      uses: actions/checkout@v3
+      # Step 1: Check out the code from the repository
+      - name: Check out the code
+        uses: actions/checkout@v4
 
-    # Set up JDK for Android builds
-    - name: Set up JDK
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'zulu'
-        java-version: '17' # Update this to match your project's Java version
+      # Step 2: Set up JDK for Android (necessary for Gradle to work)
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'  # You may need to update this based on your project requirements
 
-    # Set up Android SDK
-    - name: Set up Android SDK
-      uses: android-actions/setup-android@v2
-      with:
-        api-level: 33    # Change to the Android API level your project targets
-        build-tools-version: '33.0.0' # Use your project's build tools version
-        components: |
-          platform-tools
-          build-tools;33.0.0
-          android-33
-          extra-google-google_play_services
-          extra-google-m2repository
-          extra-android-m2repository
+      # Step 3: Set up the Android SDK (required for building Android apps)
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v2
+        with:
+          api-level: 33  # Specify your target Android API level
+          build-tools-version: '33.0.0'  # Specify your project's build tools version
+          components: |
+            platform-tools
+            build-tools;33.0.0
+            android-33
+            extra-google-google_play_services
+            extra-google-m2repository
+            extra-android-m2repository
 
-    # Cache Gradle dependencies
-    - name: Cache Gradle packages
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          gradle-${{ runner.os }}-
+      # Step 4: Cache Gradle dependencies to speed up future builds
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: gradle-${{ runner.os }}-
 
-    # Build the project and run tests
-    - name: Build and run tests
-      run: ./gradlew build --stacktrace
+      # Step 5: Build the Android project
+      - name: Build the project
+        run: ./gradlew build --stacktrace
 
-    # Run lint checks
-    - name: Run Android Lint
-      run: ./gradlew lint
+      # Step 6: Run Android Lint checks to catch code issues
+      - name: Run Lint checks
+        run: ./gradlew lint
 
-    # Run unit tests
-    - name: Run Unit Tests
-      run: ./gradlew test
+      # Step 7: Run Unit Tests
+      - name: Run Unit Tests
+        run: ./gradlew test
 
-    # Run instrumented tests
-    - name: Run Instrumented Tests
-      run: ./gradlew connectedAndroidTest
-
-    # Optionally add Firebase Emulators (if needed)
-    - name: Set up Firebase Emulator
-      if: env.FIREBASE_PROJECT_ID != ''
-      run: |
-        curl -sL https://firebase.tools | bash
-        firebase setup:emulators:firestore
-        firebase setup:emulators:database
+      # Step 8: Run Instrumented UI Tests (requires Android emulator)
+      - name: Run Instrumented Tests
+        run: ./gradlew connectedAndroidTest
