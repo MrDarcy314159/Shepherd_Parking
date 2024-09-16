@@ -1,0 +1,88 @@
+{
+  "project_info": {
+    "project_number": "752353533147",
+    "firebase_url": "https://shepherd-9a70b-default-rtdb.firebaseio.com",
+    "project_id": "shepherd-9a70b",
+    "storage_bucket": "shepherd-9a70b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:752353533147:android:d953028c3a36e7bc9280fe",
+        "android_client_info": {
+          "package_name": "za.varsitycollege.shepherd_parking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "752353533147-1n7c8jv959nuoitv6p0p91g0ibg0gvh2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "za.varsitycollege.shepherd_parking",
+            "certificate_hash": "b9c7967acbcb207b45646ace4d83e33075de912c"
+          }
+        },
+        {
+          "client_id": "752353533147-965vg6jdkq11rrbqbj1iajrsdj2qdtq9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "za.varsitycollege.shepherd_parking",
+            "certificate_hash": "f5f08daaef14e0a43998a8edd64c1a6072f7d241"
+          }
+        },
+        {
+          "client_id": "752353533147-bi81b4loq8bivc4ceselqefoth3e3q3c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "za.varsitycollege.shepherd_parking",
+            "certificate_hash": "fbbf50937ff625dbd3f74eb6badc6c271aa4ea88"
+          }
+        },
+        {
+          "client_id": "752353533147-c4ugaq1un4mh5kt9msujbf8uoq20758p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "za.varsitycollege.shepherd_parking",
+            "certificate_hash": "7489359ea5e88c0ccb47788a34c96534d09840eb"
+          }
+        },
+        {
+          "client_id": "752353533147-ka4s59ol7098lmqjm1ltb4mbomhueap7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "za.varsitycollege.shepherd_parking",
+            "certificate_hash": "970ca8c9c9bc7e66fea290ed964835ceaa41e382"
+          }
+        },
+        {
+          "client_id": "752353533147-un0v6ud7jpg99a7j7oh8n4iqkc399tui.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "za.varsitycollege.shepherd_parking",
+            "certificate_hash": "d736462615bacd57bad108d2374e118bd00810b0"
+          }
+        },
+        {
+          "client_id": "752353533147-1vkekoov3afqtft357ulkq5bdk1uq6f1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDebkEyfBuizGGUynJFabHVsB9lPoSy0ZY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "752353533147-1vkekoov3afqtft357ulkq5bdk1uq6f1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
