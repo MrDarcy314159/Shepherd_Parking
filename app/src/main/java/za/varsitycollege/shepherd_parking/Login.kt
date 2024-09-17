@@ -27,6 +27,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
+import android.widget.Toast
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,9 +43,24 @@ fun LoginPage(navController: NavController) {
     val auth = remember { FirebaseAuth.getInstance() }
     val userPreferences = remember { UserPreferences(context) }
 
-    // Check if user is already logged in
+    // Launcher for BiometricActivity result
+    val biometricLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        val authSuccess = result.data?.getBooleanExtra("AUTH_SUCCESS", false) ?: false
+        if (authSuccess) {
+            // Biometric authentication succeeded
+            navController.navigate("home")
+        } else {
+            showError = true
+        }
+    }
+
+    // Check if user is offline and already logged in, then log in automatically
     LaunchedEffect(Unit) {
-        if (userPreferences.isLoggedIn()) {
+        val isOffline = !isOnline(context) // Check if the device is offline
+        if (isOffline && userPreferences.isLoggedIn()) {
+            // If offline and user is logged in, auto-login the last user
             val userEmail = userPreferences.getLoggedInUserEmail()
             if (userEmail == "admin@gmail.com") {
                 navController.navigate("guard_house")
@@ -51,18 +70,7 @@ fun LoginPage(navController: NavController) {
         }
     }
 
-    // Launcher to start BiometricActivity and handle the result
-    val biometricLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        val authSuccess = result.data?.getBooleanExtra("AUTH_SUCCESS", false) ?: false
-        if (authSuccess) {
-            navController.navigate("home")  // Navigate to home after successful biometric authentication
-        } else {
-            showError = true
-        }
-    }
-
+    // Display the login form if the user is online or hasn't logged in before
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -230,7 +238,6 @@ fun LoginPage(navController: NavController) {
 
             // Biometric login button
             Button(onClick = {
-                // Launch BiometricActivity to authenticate using biometrics
                 val intent = Intent(context, BiometricActivity::class.java)
                 biometricLauncher.launch(intent)
             }) {
@@ -251,6 +258,24 @@ fun LoginPage(navController: NavController) {
                     context.startActivity(intent)
                 }
         )
+    }
+}
+
+// Function to check if the device is online
+fun isOnline(context: Context): Boolean {
+    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        val network = connectivityManager.activeNetwork ?: return false
+        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+        return when {
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            else -> false
+        }
+    } else {
+        val networkInfo = connectivityManager.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
     }
 }
 
