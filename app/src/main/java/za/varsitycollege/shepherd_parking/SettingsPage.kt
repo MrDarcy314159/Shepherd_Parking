@@ -33,13 +33,16 @@ import androidx.navigation.NavController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsPage(navController: NavController, userManager: UserManager) {
-    var studentNumber by remember { mutableStateOf("ST10000001") }
+    var studentNumber by remember { mutableStateOf("ST10000001") } // Default value until fetched
     var facialRecognition by remember { mutableStateOf(false) }
     var fingerprintSettings by remember { mutableStateOf(false) }
     var locationServices by remember { mutableStateOf(false) }
     var pushNotifications by remember { mutableStateOf(false) }
+
     var expandedDropdown by remember { mutableStateOf(false) }
+
     val context = LocalContext.current
+
     val languageManager = remember { LanguageManager(context) }
     var selectedLanguage by remember { mutableStateOf(languageManager.getLanguage()) }
 
@@ -54,7 +57,7 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                     studentNumber = fetchedStudentNumber
                 },
                 onFailure = {
-                    Toast.makeText(context, stringResource(R.string.failed_to_load_student_number), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Failed to load student number", Toast.LENGTH_SHORT).show()
                 }
             )
         }
@@ -91,8 +94,10 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
             }
         }
 
+        // Add the observer to the lifecycle
         lifecycleOwner.lifecycle.addObserver(observer)
 
+        // Clean up when the composable is disposed
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
@@ -112,7 +117,7 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
 
             // Settings Page Header
             Text(
-                text = stringResource(R.string.settings),
+                text = "Settings:",
                 style = MaterialTheme.typography.headlineMedium,
                 color = AppColors.DarkGray,
                 modifier = Modifier.padding(vertical = 0.dp)
@@ -120,7 +125,7 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
 
             Spacer(modifier = Modifier.height(5.dp))
 
-            // Settings Card
+            // Student Information Section with Update Button and other settings inside the same card
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -131,7 +136,7 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = stringResource(R.string.student_information),
+                        text = "Student Information",
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold,
                         color = AppColors.DarkGray,
@@ -142,7 +147,7 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                     OutlinedTextField(
                         value = studentNumber,
                         onValueChange = { studentNumber = it },
-                        label = { Text(stringResource(R.string.student_number)) },
+                        label = { Text("Student Number") },
                         modifier = Modifier.fillMaxWidth(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = AppColors.MintGreen,
@@ -159,9 +164,9 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                             email?.let {
                                 if (studentNumber.isNotBlank()) {
                                     userManager.saveStudentNumber(it, studentNumber)
-                                    Toast.makeText(context, stringResource(R.string.student_number_updated), Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, "Student number updated successfully!", Toast.LENGTH_SHORT).show()
                                 } else {
-                                    Toast.makeText(context, stringResource(R.string.student_number_empty), Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, "Student number cannot be empty", Toast.LENGTH_SHORT).show()
                                 }
                             }
                         },
@@ -171,12 +176,12 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                         ),
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(stringResource(R.string.update_student_number))
+                        Text("Update Student Number")
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Fingerprint and Facial Recognition Checkboxes
+                    // Fingerprint and Facial Recognition Checkboxes inside the card
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
@@ -192,7 +197,7 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                                     uncheckedColor = AppColors.DarkGray
                                 )
                             )
-                            Text(stringResource(R.string.fingerprint), color = AppColors.DarkGray)
+                            Text("Fingerprint", color = AppColors.DarkGray)
                         }
 
                         Row(
@@ -206,7 +211,7 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                                     uncheckedColor = AppColors.DarkGray
                                 )
                             )
-                            Text(stringResource(R.string.facial_recognition), color = AppColors.DarkGray)
+                            Text("Facial Recognition", color = AppColors.DarkGray)
                         }
                     }
 
@@ -217,12 +222,12 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(stringResource(R.string.location_services), color = AppColors.DarkGray)
+                        Text("Location Services", color = AppColors.DarkGray)
                         Spacer(modifier = Modifier.width(12.dp))
                         Switch(
                             checked = locationServices,
                             onCheckedChange = {
-                                openAppInfo()
+                                openAppInfo() // Redirect to App Info when toggled
                             },
                             colors = SwitchDefaults.colors(
                                 checkedThumbColor = Color.White,
@@ -239,12 +244,12 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(stringResource(R.string.push_notifications), color = AppColors.DarkGray)
+                        Text("Push Notifications", color = AppColors.DarkGray)
                         Spacer(modifier = Modifier.width(12.dp))
                         Switch(
                             checked = pushNotifications,
                             onCheckedChange = {
-                                openAppInfo()
+                                openAppInfo() // Redirect to App Info when toggled
                             },
                             colors = SwitchDefaults.colors(
                                 checkedThumbColor = Color.White,
@@ -256,10 +261,10 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // View App Permissions Button
+                    // View App Permissions Button (opens App Info)
                     Button(
                         onClick = {
-                            openAppInfo()
+                            openAppInfo() // Opens the app info screen
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = AppColors.MintGreen,
@@ -267,12 +272,11 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                         ),
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(stringResource(R.string.view_app_permissions))
+                        Text("View App Permissions")
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Language Selector with Dropdown Menu
                     Box {
                         OutlinedTextField(
                             value = languages.find { it.first == selectedLanguage }?.second ?: "English",
@@ -282,7 +286,7 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                             trailingIcon = {
                                 Icon(
                                     imageVector = if (expandedDropdown) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                                    contentDescription = stringResource(R.string.expand_language_selection),
+                                    contentDescription = "Expand Language Selection",
                                     modifier = Modifier.clickable { expandedDropdown = !expandedDropdown }
                                 )
                             },
