@@ -6,10 +6,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
-class UserManager(private val context: Context) {
+open class UserManager(
+    private val context: Context,
+    val auth: FirebaseAuth = FirebaseAuth.getInstance(),  // Allow injection of FirebaseAuth
+    val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()  // Allow injection of FirebaseFirestore
+) {
     private val sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-    private val firestore = FirebaseFirestore.getInstance()
-    private val auth = FirebaseAuth.getInstance()
 
     // Fetch student number from Firestore or use a default if user is a Google user without one
     fun getStudentNumber(onSuccess: (String) -> Unit, onFailure: () -> Unit) {
