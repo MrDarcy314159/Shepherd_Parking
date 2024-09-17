@@ -34,12 +34,17 @@ import com.google.firebase.messaging.FirebaseMessaging
 import za.varsitycollege.shepherd_parking.UserManager
 import za.varsitycollege.shepherd_parking.SettingsPage
 
-// Define a CompositionLocal for UserManager
+// Define CompositionLocals for UserManager and LanguageManager
 val LocalUserManager = compositionLocalOf<UserManager> { error("UserManager not provided") }
+val LocalLanguageManager = compositionLocalOf<LanguageManager> { error("LanguageManager not provided") }
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val languageManager = LanguageManager(this)
+        languageManager.setLanguage(languageManager.getLanguage())
 
         // Subscribe to FCM topic
         FirebaseMessaging.getInstance().subscribeToTopic("parking")
@@ -64,7 +69,9 @@ class MainActivity : ComponentActivity() {
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
-        val userManager = remember { UserManager(context) }  // Creating the UserManager instance
+        val userManager = remember { UserManager(context) }
+        // Creating the UserManager instance
+        val languageManager = remember { LanguageManager(context) }
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -73,7 +80,10 @@ class MainActivity : ComponentActivity() {
         val lightBlue = Color(0xFFE3F2FD)
 
         // Provide the UserManager globally through CompositionLocalProvider
-        CompositionLocalProvider(LocalUserManager provides userManager) {
+        CompositionLocalProvider(
+            LocalUserManager provides userManager,
+            LocalLanguageManager provides languageManager
+        ) {
             ModalNavigationDrawer(
                 drawerState = drawerState,
                 drawerContent = {
