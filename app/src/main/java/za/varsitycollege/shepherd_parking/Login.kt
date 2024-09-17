@@ -1,7 +1,10 @@
 package za.varsitycollege.shepherd_parking
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,6 +48,18 @@ fun LoginPage(navController: NavController) {
             } else {
                 navController.navigate("home")
             }
+        }
+    }
+
+    // Launcher to start BiometricActivity and handle the result
+    val biometricLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        val authSuccess = result.data?.getBooleanExtra("AUTH_SUCCESS", false) ?: false
+        if (authSuccess) {
+            navController.navigate("home")  // Navigate to home after successful biometric authentication
+        } else {
+            showError = true
         }
     }
 
@@ -209,6 +224,17 @@ fun LoginPage(navController: NavController) {
                         )
                     }
                 }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Biometric login button
+            Button(onClick = {
+                // Launch BiometricActivity to authenticate using biometrics
+                val intent = Intent(context, BiometricActivity::class.java)
+                biometricLauncher.launch(intent)
+            }) {
+                Text(text = "Login with Biometrics")
             }
         }
 

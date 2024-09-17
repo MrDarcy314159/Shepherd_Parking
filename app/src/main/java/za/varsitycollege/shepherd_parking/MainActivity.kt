@@ -276,4 +276,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-

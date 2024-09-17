@@ -103,4 +103,7 @@ dependencies {
     testImplementation ("junit:junit:4.13.2")
     testImplementation ("org.mockito:mockito-core:4.0.0")
     testImplementation ("org.mockito.kotlin:mockito-kotlin:4.0.0")
+
+    //Biometric
+    implementation ("androidx.biometric:biometric:1.2.0-alpha04")
 }

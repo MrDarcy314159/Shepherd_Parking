@@ -51,6 +51,9 @@
             android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
             android:exported="false" />
 
+        <!-- Declare BiometricActivity here -->
+        <activity android:name=".BiometricActivity" />
+
         <!-- Firebase Messaging Service -->
         <service
             android:name=".MyFirebaseMessagingService"
