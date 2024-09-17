@@ -25,7 +25,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
 
-// Testing Room-DB Branch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginPage(navController: NavController) {
@@ -34,7 +33,20 @@ fun LoginPage(navController: NavController) {
     var showError by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
-    val auth = remember { FirebaseAuth.getInstance() } // Initialize FirebaseAuth
+    val auth = remember { FirebaseAuth.getInstance() }
+    val userPreferences = remember { UserPreferences(context) }
+
+    // Check if user is already logged in
+    LaunchedEffect(Unit) {
+        if (userPreferences.isLoggedIn()) {
+            val userEmail = userPreferences.getLoggedInUserEmail()
+            if (userEmail == "admin@gmail.com") {
+                navController.navigate("guard_house")
+            } else {
+                navController.navigate("home")
+            }
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -134,16 +146,15 @@ fun LoginPage(navController: NavController) {
                             auth.signInWithEmailAndPassword(email, password)
                                 .addOnCompleteListener { task ->
                                     if (task.isSuccessful) {
-                                        // Check if the email is admin - to take to guard house
+                                        // Save login state
+                                        userPreferences.setLoggedIn(email)
+
                                         if (email == "admin@gmail.com") {
-                                            // Navigate to guard house if the user is admin
                                             navController.navigate("guard_house")
                                         } else {
-                                            // Navigate to home for regular users
                                             navController.navigate("home")
                                         }
                                     } else {
-                                        // Show error message on failed login
                                         showError = true
                                     }
                                 }
@@ -216,7 +227,6 @@ fun LoginPage(navController: NavController) {
         )
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
