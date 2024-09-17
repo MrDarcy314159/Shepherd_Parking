@@ -9,7 +9,7 @@ import com.google.firebase.auth.FirebaseUser
 open class UserManager(
     private val context: Context,
     val auth: FirebaseAuth = FirebaseAuth.getInstance(),  // Allow injection of FirebaseAuth
-    val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()  // Allow injection of FirebaseFirestore
+    val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()  // Allow injection of Firebase Firestore
 ) {
     private val sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
 
