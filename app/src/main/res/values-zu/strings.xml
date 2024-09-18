@@ -40,6 +40,7 @@
     <string name="dont_have_account">Awunayo i-akhawunti?</string>
     <string name="shepherd_parking_header">SHEPHERD UKUPAKA</string>
     <string name="home">Ikhaya</string>
+    <string name="login_with_biometrics">Ngena ngemibhalo ye-biometrics</string>
 
     <!-- Map Updates Strings -->
     <string name="map_updates_header">Izibuyekezo Zemephu (Amahora angama-24 Okokugcina)</string>

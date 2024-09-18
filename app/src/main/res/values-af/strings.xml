@@ -40,6 +40,7 @@
     <string name="dont_have_account">Het jy nie \'n rekening nie?</string>
     <string name="shepherd_parking_header">SHEPHERD PARKERING</string>
     <string name="home">Tuis</string>
+    <string name="login_with_biometrics">Teken in met biometrie</string>
 
     <!-- Map Updates Strings -->
     <string name="map_updates_header">Kaartopdaterings (Laaste 24 Ure)</string>

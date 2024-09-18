@@ -73,7 +73,7 @@ class MainActivity : ComponentActivity() {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
-        val routesWithoutTopBarAndDrawer = listOf("login", "newUser", "map_updates", "guard_house")
+        val routesWithoutTopBarAndDrawer = listOf("login", "newUser", "map_updates", "guard_house", "signUp")
         val lightBlue = Color(0xFFE3F2FD)
 
         CompositionLocalProvider(
@@ -171,17 +171,6 @@ class MainActivity : ComponentActivity() {
                                 selected = currentRoute == "map_updates",
                                 onClick = {
                                     navController.navigate("map_updates")
-                                    scope.launch { drawerState.close() }
-                                }
-                            )
-                            NavigationDrawerItem(
-                                icon = { Icon(Icons.Default.Face, contentDescription = null) },
-                                label = { Text(stringResource(R.string.guard_house)) },
-                                selected = false,
-                                onClick = {
-                                    navController.navigate("guard_house") {
-                                        popUpTo(0)
-                                    }
                                     scope.launch { drawerState.close() }
                                 }
                             )

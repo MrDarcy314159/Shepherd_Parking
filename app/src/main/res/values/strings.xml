@@ -40,6 +40,7 @@
     <string name="dont_have_account">Don\'t have an account?</string>
     <string name="shepherd_parking_header">SHEPHERD PARKING</string>
     <string name="home">Home</string>
+    <string name="login_with_biometrics">Login with biometrics</string>
 
     <!-- Map Updates Strings -->
     <string name="map_updates_header">Map Updates (Last 24 Hours)</string>
