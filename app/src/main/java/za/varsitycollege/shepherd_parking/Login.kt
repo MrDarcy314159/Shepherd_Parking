@@ -1,7 +1,14 @@
 package za.varsitycollege.shepherd_parking
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,8 +24,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,6 +43,33 @@ fun LoginPage(navController: NavController) {
     val context = LocalContext.current
     val auth = remember { FirebaseAuth.getInstance() }
     val userPreferences = remember { UserPreferences(context) }
+
+    // Launcher for BiometricActivity result
+    val biometricLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        val authSuccess = result.data?.getBooleanExtra("AUTH_SUCCESS", false) ?: false
+        if (authSuccess) {
+            // Biometric authentication succeeded
+            navController.navigate("home")
+        } else {
+            showError = true
+        }
+    }
+
+    // Check if user is offline and already logged in, then log in automatically
+    LaunchedEffect(Unit) {
+        val isOffline = !isOnline(context) // Check if the device is offline
+        if (isOffline && userPreferences.isLoggedIn()) {
+            // If offline and user is logged in, auto-login the last user
+            val userEmail = userPreferences.getLoggedInUserEmail()
+            if (userEmail == "admin@gmail.com") {
+                navController.navigate("guard_house")
+            } else {
+                navController.navigate("home")
+            }
+        }
+    }
 
     // Check if user is already logged in
     LaunchedEffect(Unit) {
@@ -211,6 +245,16 @@ fun LoginPage(navController: NavController) {
                     }
                 }
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Biometric login button
+            Button(onClick = {
+                val intent = Intent(context, BiometricActivity::class.java)
+                biometricLauncher.launch(intent)
+            }) {
+                Text(text = "Login with Biometrics")
+            }
         }
 
         // Varsity College logo at the bottom
@@ -226,6 +270,24 @@ fun LoginPage(navController: NavController) {
                     context.startActivity(intent)
                 }
         )
+    }
+}
+
+// Function to check if the device is online
+fun isOnline(context: Context): Boolean {
+    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        val network = connectivityManager.activeNetwork ?: return false
+        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+        return when {
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            else -> false
+        }
+    } else {
+        val networkInfo = connectivityManager.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
     }
 }
 
