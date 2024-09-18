@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -52,8 +53,10 @@ fun TrafficFeedbackPage(navController: NavController, userManager: UserManager) 
     var recentUpdates by remember { mutableStateOf(listOf<Map<String, Any>>()) }
     var currentLocation by remember { mutableStateOf<String?>(null) }
     var currentUser by remember { mutableStateOf<User?>(null) }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
+    var errorMessageKey by remember { mutableStateOf<Int?>(null) } // Store resource id of the error message
+    var errorMessageArg by remember { mutableStateOf<String?>(null) } // Optional argument for the error message
     var debugInfo by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
     val firestore: FirebaseFirestore = Firebase.firestore
     val scope = rememberCoroutineScope()
@@ -148,20 +151,20 @@ fun TrafficFeedbackPage(navController: NavController, userManager: UserManager) 
                         Spacer(modifier = Modifier.width(8.dp))
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = "SHEPHERD PARKING",
+                                text = stringResource(R.string.app_name),
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = AppColors.DarkGray
                             )
                             Text(
-                                text = "Traffic Feedback",
+                                text = stringResource(R.string.traffic_feedback),
                                 fontSize = 18.sp,
                                 color = AppColors.DarkGray
                             )
                         }
                         Image(
                             painter = painterResource(id = R.drawable.sheep),
-                            contentDescription = "Sheep Logo",
+                            contentDescription = stringResource(R.string.sheep_logo_description),
                             modifier = Modifier
                                 .size(60.dp)
                                 .clip(CircleShape)
@@ -189,7 +192,7 @@ fun TrafficFeedbackPage(navController: NavController, userManager: UserManager) 
                     OutlinedTextField(
                         value = message,
                         onValueChange = { message = it },
-                        label = { Text("Message") },
+                        label = { Text(stringResource(R.string.message)) },
                         modifier = Modifier.fillMaxWidth(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = AppColors.MintGreen,
@@ -206,10 +209,10 @@ fun TrafficFeedbackPage(navController: NavController, userManager: UserManager) 
                         onExpandedChange = { expanded = !expanded }
                     ) {
                         OutlinedTextField(
-                            value = category.name,
+                            value = getCategoryString(category),  // Get the localized string
                             onValueChange = {},
                             readOnly = true,
-                            label = { Text("Category") },
+                            label = { Text(stringResource(R.string.category)) },
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                             modifier = Modifier.menuAnchor().fillMaxWidth(),
                             colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -223,7 +226,7 @@ fun TrafficFeedbackPage(navController: NavController, userManager: UserManager) 
                         ) {
                             FeedbackCategory.values().forEach { feedbackCategory ->
                                 DropdownMenuItem(
-                                    text = { Text(feedbackCategory.name) },
+                                    text = { Text(getCategoryString(feedbackCategory)) },  // Use localized string
                                     onClick = {
                                         category = feedbackCategory
                                         expanded = false
@@ -232,6 +235,7 @@ fun TrafficFeedbackPage(navController: NavController, userManager: UserManager) 
                             }
                         }
                     }
+
 
                     Spacer(modifier = Modifier.height(16.dp))
 
@@ -266,27 +270,35 @@ fun TrafficFeedbackPage(navController: NavController, userManager: UserManager) 
                                         // Clear the message field and reset category
                                         message = ""
                                         category = FeedbackCategory.Other
-                                        errorMessage = null
+                                        errorMessageKey = null
                                         debugInfo += "\nFeedback submitted successfully"
                                     } catch (e: Exception) {
-                                        errorMessage = "Failed to submit feedback: ${e.message}"
+                                        errorMessageKey = R.string.failed_to_submit_feedback
+                                        errorMessageArg = e.message // Pass exception message
                                         debugInfo += "\nError: ${e.message}"
                                     }
                                 }
                             } else {
-                                errorMessage = "Please enter a message before submitting."
+                                errorMessageKey = R.string.please_enter_message
                             }
                         },
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(containerColor = AppColors.MintGreen),
                         enabled = message.isNotBlank()
                     ) {
-                        Text("Submit", color = MaterialTheme.colorScheme.onPrimary)
+                        Text(stringResource(R.string.submit), color = MaterialTheme.colorScheme.onPrimary)
                     }
 
                     // Display error message if any
-                    errorMessage?.let {
-                        Text(it, color = Color.Red, modifier = Modifier.padding(top = 8.dp))
+                    errorMessageKey?.let {
+                        Text(
+                            text = if (errorMessageArg != null)
+                                stringResource(it, errorMessageArg!!)
+                            else
+                                stringResource(it),
+                            color = Color.Red,
+                            modifier = Modifier.padding(top = 8.dp)
+                        )
                     }
 
                     // Debug information
@@ -299,7 +311,7 @@ fun TrafficFeedbackPage(navController: NavController, userManager: UserManager) 
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.DarkGray)
                 ) {
-                    Text("View Map Updates")
+                    Text(stringResource(R.string.view_map_updates))
                 }
             }
 
@@ -315,7 +327,7 @@ fun TrafficFeedbackPage(navController: NavController, userManager: UserManager) 
                     modifier = Modifier.padding(16.dp)
                 ) {
                     Text(
-                        "Recent Updates",
+                        stringResource(R.string.recent_updates),
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
                         modifier = Modifier.padding(bottom = 8.dp)
@@ -338,6 +350,8 @@ fun TrafficFeedbackPage(navController: NavController, userManager: UserManager) 
         }
     }
 }
+
+
 
 @Composable
 fun UpdateItem(studentNumber: String, time: String, message: String, location: String, category: String) {
@@ -412,6 +426,18 @@ fun getStreetName(context: Context, location: String): String {
         "Unknown Street"
     }
 }
+
+// Function to get string resource for each FeedbackCategory
+@Composable
+fun getCategoryString(category: FeedbackCategory): String {
+    return when (category) {
+        FeedbackCategory.Accident -> stringResource(R.string.accident)
+        FeedbackCategory.HeavyTraffic -> stringResource(R.string.heavy_traffic)
+        FeedbackCategory.RoadConstruction -> stringResource(R.string.road_construction)
+        FeedbackCategory.Other -> stringResource(R.string.other)
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -40,10 +42,20 @@ import za.varsitycollege.shepherd_parking.UserManager
 
 @Composable
 fun HomePage(navController: NavController, userManager: UserManager) {
-    // Variables to store the car count and max car count
     var carCount by remember { mutableStateOf(0) }
     var maxCarCount by remember { mutableStateOf(100) }
     var progress by remember { mutableStateOf(0f) }
+    var toastMessage by remember { mutableStateOf<String?>(null) }
+
+    val context = LocalContext.current
+
+    // Show toast message
+    LaunchedEffect(toastMessage) {
+        toastMessage?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            toastMessage = null
+        }
+    }
 
     // Firebase Realtime Database reference
     val database = FirebaseDatabase.getInstance()
@@ -54,37 +66,33 @@ fun HomePage(navController: NavController, userManager: UserManager) {
     carCountRef.addValueEventListener(object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
             carCount = snapshot.getValue(Int::class.java) ?: 0
-            // Update the progress after ensuring maxCarCount has been fetched
             progress = if (maxCarCount > 0) carCount.toFloat() / maxCarCount.toFloat() else 0f
         }
 
         override fun onCancelled(error: DatabaseError) {
             Log.e("Firebase", "Failed to read carCount: ${error.message}")
+            toastMessage = context.getString(R.string.failed_to_read_car_count)
         }
     })
 
-    // Fetch max car count from Firebase
     maxCarCountRef.addValueEventListener(object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
             maxCarCount = snapshot.getValue(Int::class.java) ?: 100
-            // Update the progress after ensuring carCount has been fetched
             progress = if (maxCarCount > 0) carCount.toFloat() / maxCarCount.toFloat() else 0f
         }
 
         override fun onCancelled(error: DatabaseError) {
             Log.e("Firebase", "Failed to read maxCarCount: ${error.message}")
+            toastMessage = context.getString(R.string.failed_to_read_max_car_count)
         }
     })
 
-    // Firebase Database reference
     val morningCarCountRef: DatabaseReference = database.getReference("projectedMorningCars")
     val afternoonCarCountRef: DatabaseReference = database.getReference("projectedAfternoonCars")
 
-    // Remember the car count state
     val morningCarCount = remember { mutableStateOf(0) }
     val afternoonCarCount = remember { mutableStateOf(0) }
 
-    // Time slots references
     val timeSlotReferences = listOf(
         database.getReference("timeSlots/sevenToEight"),
         database.getReference("timeSlots/eightToNine"),
@@ -98,32 +106,30 @@ fun HomePage(navController: NavController, userManager: UserManager) {
         database.getReference("timeSlots/fourToFive")
     )
 
-    // Remember the time slots state
     val timeSlots = remember { List(10) { mutableStateOf(0) } }
 
-    // Load initial car count from Firebase
     LaunchedEffect(Unit) {
-        // Load morning and afternoon car counts
-        val morningSnapshot = morningCarCountRef.get().await()
-        morningCarCount.value = morningSnapshot.getValue(Int::class.java) ?: 0
+        try {
+            val morningSnapshot = morningCarCountRef.get().await()
+            morningCarCount.value = morningSnapshot.getValue(Int::class.java) ?: 0
 
-        val afternoonSnapshot = afternoonCarCountRef.get().await()
-        afternoonCarCount.value = afternoonSnapshot.getValue(Int::class.java) ?: 0
+            val afternoonSnapshot = afternoonCarCountRef.get().await()
+            afternoonCarCount.value = afternoonSnapshot.getValue(Int::class.java) ?: 0
 
-        // Load time slots from Firebase
-        timeSlotReferences.forEachIndexed { index, ref ->
-            val snapshot = ref.get().await()
-            timeSlots[index].value = snapshot.getValue(Int::class.java) ?: 0
+            timeSlotReferences.forEachIndexed { index, ref ->
+                val snapshot = ref.get().await()
+                timeSlots[index].value = snapshot.getValue(Int::class.java) ?: 0
+            }
+        } catch (e: Exception) {
+            Log.e("Firebase", "Failed to load initial data: ${e.message}")
+            toastMessage = context.getString(R.string.failed_to_load_initial_data)
         }
     }
 
-    val context = LocalContext.current
     val email = userManager.getCurrentUserEmail()
 
-    // Trigger for showing the student number dialog
     var showStudentNumberDialog by remember { mutableStateOf(false) }
 
-    // Check if the student number is missing
     LaunchedEffect(email) {
         email?.let {
             userManager.isStudentNumberMissing(it) { isMissing ->
@@ -138,44 +144,31 @@ fun HomePage(navController: NavController, userManager: UserManager) {
 
     var noFindDate by remember { mutableStateOf(false) }
 
-    Log.d("Reference Date?", noFindDate.toString())
-
-    // Check if any user has checked in today
     val todayDate = getTodaysDate()
     db.collection("check_in")
         .whereEqualTo("date", todayDate)
         .get()
         .addOnSuccessListener { result ->
-            if (result.isEmpty){
-                noFindDate = true
-            } else{
-                noFindDate = false
-            }
+            noFindDate = result.isEmpty
         }
         .addOnFailureListener {
             noFindDate = false
+            toastMessage = context.getString(R.string.failed_to_check_date)
         }
 
-    Log.d("Reference Date?2", noFindDate.toString())
-
-    // Reset car counts and time slots if no date is found
     if (noFindDate) {
-        // Reset morning and afternoon car counts
         morningCarCount.value = 0
         morningCarCountRef.setValue(morningCarCount.value)
 
         afternoonCarCount.value = 0
         afternoonCarCountRef.setValue(afternoonCarCount.value)
 
-        // Reset time slots
         timeSlots.forEachIndexed { index, slot ->
             slot.value = 0
             timeSlotReferences[index].setValue(slot.value)
         }
     }
 
-
-    // Show dialog if student number is missing
     if (showStudentNumberDialog) {
         StudentNumberDialog(onSave = { studentNumber ->
             email?.let { userManager.saveStudentNumber(it, studentNumber) }
@@ -183,7 +176,6 @@ fun HomePage(navController: NavController, userManager: UserManager) {
         })
     }
 
-    // Box layout for the home page content
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -194,7 +186,6 @@ fun HomePage(navController: NavController, userManager: UserManager) {
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Header Bubble
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
@@ -211,20 +202,20 @@ fun HomePage(navController: NavController, userManager: UserManager) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = "SHEPHERD PARKING",
+                                text = stringResource(R.string.app_name),
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = AppColors.DarkGray
                             )
                             Text(
-                                text = "Home Page",
+                                text = stringResource(R.string.home_page),
                                 fontSize = 18.sp,
                                 color = AppColors.DarkGray
                             )
                         }
                         Image(
                             painter = painterResource(id = R.drawable.sheep),
-                            contentDescription = "Sheep Logo",
+                            contentDescription = stringResource(R.string.sheep_logo_description),
                             modifier = Modifier
                                 .size(60.dp)
                                 .clip(CircleShape)
@@ -236,7 +227,6 @@ fun HomePage(navController: NavController, userManager: UserManager) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Parking Capacity Card
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
@@ -247,7 +237,7 @@ fun HomePage(navController: NavController, userManager: UserManager) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Parking Availability : ${(progress * 100).toInt()}% FULL",
+                        text = stringResource(R.string.parking_availability, (progress * 100).toInt()),
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
                     )
@@ -263,7 +253,6 @@ fun HomePage(navController: NavController, userManager: UserManager) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Main Content Card with two rows of buttons
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
@@ -273,60 +262,55 @@ fun HomePage(navController: NavController, userManager: UserManager) {
                     modifier = Modifier.padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // First Row of Buttons
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         SquareIconButton(
                             drawableId = R.drawable.check_in,
-                            contentDescription = "Check In",
+                            contentDescription = stringResource(R.string.check_in),
                             onClick = { navController.navigate("check_in") },
-                            text = "Check In",
-                            explanation = "Record your arrival at the parking area"
+                            text = stringResource(R.string.check_in),
+                            explanation = stringResource(R.string.check_in_explanation)
                         )
 
                         SquareIconButton(
                             drawableId = R.drawable.traffic_feedback_image,
-                            contentDescription = "Traffic Feedback",
+                            contentDescription = stringResource(R.string.traffic_feedback),
                             onClick = { navController.navigate("traffic_feedback") },
-                            text = "Traffic Feedback",
-                            explanation = "Report current traffic conditions"
+                            text = stringResource(R.string.traffic_feedback),
+                            explanation = stringResource(R.string.traffic_feedback_explanation)
                         )
                     }
 
                     Spacer(modifier = Modifier.height(30.dp))
 
-                    // Second Row of Buttons
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         SquareIconButton(
                             drawableId = R.drawable.late_image,
-                            contentDescription = "Late Notification",
+                            contentDescription = stringResource(R.string.late_notification),
                             onClick = { navController.navigate("late") },
-                            text = "Late",
-                            explanation = "Notify if you're running late"
+                            text = stringResource(R.string.late),
+                            explanation = stringResource(R.string.late_explanation)
                         )
                         SquareIconButton(
                             drawableId = R.drawable.analytics_image,
-                            contentDescription = "Analytics",
+                            contentDescription = stringResource(R.string.analytics),
                             onClick = { navController.navigate("analytics") },
-                            text = "Analytics",
-                            explanation = "View parking usage statistics"
+                            text = stringResource(R.string.analytics),
+                            explanation = stringResource(R.string.analytics_explanation)
                         )
                     }
                 }
             }
         }
 
-
-
-        // Varsity College logo at the bottom
         Image(
             painter = painterResource(id = R.drawable.varsity_college_icon),
-            contentDescription = "Varsity College Logo",
+            contentDescription = stringResource(R.string.varsity_college_logo_description),
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 16.dp)
@@ -351,7 +335,7 @@ fun StudentNumberDialog(
         containerColor = Color.White,
         title = {
             Text(
-                text = "Enter Student Number",
+                text = stringResource(R.string.enter_student_number),
                 color = Color.Black,
                 fontWeight = FontWeight.Bold
             )
@@ -359,14 +343,14 @@ fun StudentNumberDialog(
         text = {
             Column {
                 Text(
-                    text = "Please enter your student number to complete your registration.",
+                    text = stringResource(R.string.enter_student_number_explanation),
                     color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
                     value = studentNumber,
                     onValueChange = { studentNumber = it },
-                    label = { Text("Student Number", color = Color.Gray) },
+                    label = { Text(stringResource(R.string.student_number), color = Color.Gray) },
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         focusedBorderColor = Color.Gray,
                         unfocusedBorderColor = Color.LightGray,
@@ -391,7 +375,7 @@ fun StudentNumberDialog(
                     contentColor = Color.Black
                 )
             ) {
-                Text("Save")
+                Text(stringResource(R.string.save))
             }
         }
     )
@@ -446,7 +430,6 @@ fun SquareIconButton(
     }
 }
 
-// Helper function to get the current date in DD/MM/YYYY format
 fun getTodaysDate(): String {
     val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     return sdf.format(Date())

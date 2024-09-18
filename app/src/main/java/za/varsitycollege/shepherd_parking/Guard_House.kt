@@ -45,6 +45,8 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import androidx.compose.ui.res.stringResource
+import za.varsitycollege.shepherd_parking.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -94,20 +96,20 @@ fun GuardHousePage(navController: NavController) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = "SHEPHERD PARKING",
+                                text = stringResource(R.string.app_name),
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = AppColors.DarkGray
                             )
                             Text(
-                                text = "Guard House",
+                                text = stringResource(R.string.guard_house),
                                 fontSize = 18.sp,
                                 color = AppColors.DarkGray
                             )
                         }
                         Image(
                             painter = painterResource(id = R.drawable.sheep),
-                            contentDescription = "Sheep Logo",
+                            contentDescription = stringResource(R.string.app_name),
                             modifier = Modifier
                                 .size(60.dp)
                                 .clip(CircleShape)
@@ -122,29 +124,27 @@ fun GuardHousePage(navController: NavController) {
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.DarkGray)
             ) {
-                Text("Logout")
+                Text(stringResource(R.string.logout))
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedButton(
-                onClick = {
-                    showDialog = true
-                },
+                onClick = { showDialog = true },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.DarkGray)
             ) {
-                Text("Reset Car Count")
+                Text(stringResource(R.string.reset_car_count))
             }
 
             if (showDialog) {
                 AlertDialog(
                     onDismissRequest = { showDialog = false },
                     title = {
-                        Text(text = "Confirm Reset")
+                        Text(text = stringResource(R.string.confirm_reset))
                     },
                     text = {
-                        Text("Are you sure you would like to reset the car count?")
+                        Text(stringResource(R.string.reset_message))
                     },
                     confirmButton = {
                         Button(
@@ -154,16 +154,14 @@ fun GuardHousePage(navController: NavController) {
                                 showDialog = false
                             }
                         ) {
-                            Text("Yes")
+                            Text(stringResource(R.string.yes))
                         }
                     },
                     dismissButton = {
                         Button(
-                            onClick = {
-                                showDialog = false
-                            }
+                            onClick = { showDialog = false }
                         ) {
-                            Text("Cancel")
+                            Text(stringResource(R.string.cancel))
                         }
                     }
                 )
@@ -188,7 +186,7 @@ fun GuardHousePage(navController: NavController) {
                 ) {
                     // Display the current car count
                     Text(
-                        text = "Cars on Campus: ${carCount.value}",
+                        text = stringResource(R.string.cars_on_campus, carCount.value),
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         color = AppColors.DarkGray
@@ -199,7 +197,7 @@ fun GuardHousePage(navController: NavController) {
                     // Add Car Button
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
-                            text = "Add Car:",
+                            text = stringResource(R.string.add_car),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             color = AppColors.DarkGray
@@ -220,7 +218,7 @@ fun GuardHousePage(navController: NavController) {
                         ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.plus),
-                                contentDescription = "Add Car",
+                                contentDescription = stringResource(R.string.add_car),
                                 modifier = Modifier.size(40.dp),
                                 tint = Color.White
                             )
@@ -232,7 +230,7 @@ fun GuardHousePage(navController: NavController) {
                     // Minus Car Button
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
-                            text = "Minus Car:",
+                            text = stringResource(R.string.minus_car),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             color = AppColors.DarkGray
@@ -253,7 +251,7 @@ fun GuardHousePage(navController: NavController) {
                         ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.minus),
-                                contentDescription = "Minus Car",
+                                contentDescription = stringResource(R.string.minus_car),
                                 modifier = Modifier.size(40.dp),
                                 tint = Color.White
                             )

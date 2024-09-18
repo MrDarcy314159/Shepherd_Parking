@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Existing strings -->
+    <string name="app_name">Shepherd Parking</string>
+    <string name="sheep_logo_description">Ilogo Yenkunzi</string>
+    <string name="parking_status">Isimo Sokupaka:</string>
+    <string name="parking_full_percentage">%d%% IGCCWE</string>
+    <string name="sign_up">Bhalisa</string>
+    <string name="or">NOMA</string>
+    <string name="login">Ngena</string>
+    <string name="continue_with_google">Qhubeka ne-Google</string>
+    <string name="google_logo_description">Google logo</string>
+    <string name="varsity_college_logo_description">Ilogo ye-Varsity College</string>
+    <string name="account_exists_title">I-akhawunti Ikhona</string>
+    <string name="account_exists_message">Unayo i-akhawunti nathi. Ungathanda ukungena?</string>
+    <string name="sign_in">Ngena</string>
+    <string name="cancel">Khansela</string>
+
+    <!-- Settings -->
+    <string name="settings">Izilungiselelo:</string>
+    <string name="student_information">Ulwazi Lomfundi</string>
+    <string name="student_number">Inombolo Yomfundi</string>
+    <string name="update_student_number">Buyekeza Inombolo Yomfundi</string>
+    <string name="fingerprint">Umlandeli weFingikhodi</string>
+    <string name="facial_recognition">Ukubona Ubuso</string>
+    <string name="location_services">Izinsiza Zendawo</string>
+    <string name="push_notifications">Izaziso Zokucindezela</string>
+    <string name="view_app_permissions">Buka Imvume Yohlelo Lokusebenza</string>
+    <string name="select_language">Khetha Ulimi</string>
+    <string name="expand_language_selection">Yelula Ukukhethwa Kwelimi</string>
+    <string name="failed_to_load_student_number">Yehlulekile ukulayisha inombolo yomfundi</string>
+    <string name="student_number_updated_successfully">Inombolo yomfundi ivuselelwe ngempumelelo!</string>
+    <string name="student_number_cannot_be_empty">Inombolo yomfundi ayinakuba yize</string>
+
+    <!-- Login Page Strings -->
+    <string name="email">I-imeyili</string>
+    <string name="password">Iphasiwedi</string>
+    <string name="invalid_email_or_password">I-imeyili noma iphasiwedi ayilungile</string>
+    <string name="forgot_password">Ukhohlwe Iphasiwedi?</string>
+    <string name="dont_have_account">Awunayo i-akhawunti?</string>
+    <string name="shepherd_parking_header">SHEPHERD UKUPAKA</string>
+    <string name="home">Ikhaya</string>
+
+    <!-- Map Updates Strings -->
+    <string name="map_updates_header">Izibuyekezo Zemephu (Amahora angama-24 Okokugcina)</string>
+    <string name="loading">Iyalayisha...</string>
+    <string name="no_feedback_data">Ayikho idatha yokubuyekeza emuva etholakalayo emini eyi-24 edlule</string>
+    <string name="error_loading_feedback">Iphutha ekulayisheni ukubuyekeza: %1$s</string>
+    <string name="legend">Inganekwane</string>
+    <string name="accident">Ingozi</string>
+    <string name="heavy_traffic">Ithrafikhi Esindayo</string>
+    <string name="road_construction">Ukwakhiwa Kwendlela</string>
+    <string name="other">Okunye</string>
+    <string name="feedback_from">Impendulo evela ku-%1$s</string>
+    <string name="menu">Imenyu</string>
+
+    <!-- New User Page -->
+    <string name="name">Igama</string>
+    <string name="surname">Isibongo</string>
+    <string name="this_field_is_required">Le nsimu iyadingeka</string>
+    <string name="thanks_for_signing_up">Ngiyabonga ngokubhalisa!</string>
+    <string name="already_have_account">Usunayo i-akhawunti?</string>
+    <string name="varsity_college_logo">Ilogo yeVarsity College</string>
+
+    <!-- Guard House-->
+    <string name="language_updated">Ulimi luguqulwe lwaba %1$s</string>
+    <string name="guard_house">Indlu Yabahlali</string>
+    <string name="logout">Phuma</string>
+    <string name="reset_car_count">Setha Kabusha Inani Lezimoto</string>
+    <string name="confirm_reset">Qinisekisa Ukusetha Kabusha</string>
+    <string name="reset_message">Uqinisekile ukuthi ufuna ukusetha kabusha inani lezimoto?</string>
+    <string name="yes">Yebo</string>
+    <string name="cars_on_campus">Izimoto Ekhampasini: %1$d</string>
+    <string name="add_car">Engeza Imoto:</string>
+    <string name="minus_car">Susa Imoto:</string>
+
+    <!-- Analytics-->
+    <string name="analytics">Ukuhlaziya</string>
+    <string name="projected_morning_capacity">Amandla okuhlaziya ngakusasa ekuseni</string>
+    <string name="projected_afternoon_capacity">Amandla okuhlaziya ngakusasa ntambama</string>
+    <string name="full">% UGCOLE</string>
+    <string name="projected_capacity_chart">Amandla okuhlaziya ngakusasa</string>
+    <string name="time_slots">Izikhathi Zesikhathi</string>
+
+    <!--Check In-->
+    <string name="morning">Ekuseni</string>
+    <string name="afternoon">Ntambama</string>
+    <string name="select_time_morning_afternoon">Khetha Isikhathi (Ekuseni/Ntambama)</string>
+    <string name="select_specific_time_slot">Khetha Isikhathi Esithile</string>
+    <string name="checked_in">Ungenile</string>
+    <string name="check_in_status">Isimo Sokungena</string>
+    <string name="checked_in_for_tomorrow">Ungenile kusasa %s.</string>
+    <string name="not_checked_in">Awukangeni</string>
+    <string name="not_checked_in_yet">Awukakangeni.</string>
+    <string name="remove_check_in">Susa Ukungena</string>
+    <string name="check_in_success_message">Siyabonga ngokungena endaweni yokupaka yasekhampasini. Siyakubona kusasa!</string>
+    <string name="check_in_removed_successfully">Isimo sokungena sisusiwe ngempumelelo.</string>
+    <string name="no_check_in_record_found">Akukho rekhodi lokungena elitholakele ukuba lisuswe.</string>
+    <string name="already_checked_in_today">Usuvele ungenile namhlanje.</string>
+
+    <!--Home Page-->
+    <string name="home_page">Ikhasi Lasekhaya</string>
+    <string name="parking_availability">Ukutholakala Kwepaki : %d%% KUGCWELE</string>
+    <string name="check_in">Ngena</string>
+    <string name="check_in_explanation">Rekhoda ukufika kwakho endaweni yokupaka</string>
+    <string name="traffic_feedback">Umbiko Wezithuthi</string>
+    <string name="traffic_feedback_explanation">Bika isimo sezithuthi samanje</string>
+    <string name="late_notification">Isaziso Sokufika Muva</string>
+    <string name="late">Emuva</string>
+    <string name="late_explanation">Azisa uma uzofika muva</string>
+    <string name="analytics_explanation">Buka izibalo zokusetshenziswa kwepaki</string>
+    <string name="enter_student_number">Faka Inombolo Yomfundi</string>
+    <string name="enter_student_number_explanation">Sicela ufake inombolo yakho yomfundi ukuze uqede ukubhalisa.</string>
+    <string name="save">Londoloza</string>
+    <string name="failed_to_read_car_count">Ihlulekile ukufunda inombolo yezimoto</string>
+    <string name="failed_to_read_max_car_count">Ihlulekile ukufunda inombolo enkulu yezimoto</string>
+    <string name="failed_to_load_initial_data">Ihlulekile ukulayisha idatha yokuqala</string>
+    <string name="failed_to_check_date">Ihlulekile ukuhlola usuku</string>
+
+    <!--Late Page-->
+    <string name="select_lecturer">Khetha Umfundisi</string>
+    <string name="select_reason">Khetha Isizathu</string>
+    <string name="failed_to_fetch_student_number">Ihlulekile ukuthola inombolo yomfundi</string>
+    <string name="reason_traffic">Umgwaqo</string>
+    <string name="reason_accident">Ingozi</string>
+    <string name="reason_other">Okunye</string>
+    <string name="robot_icon_description">Uphawu Lwerobhothi</string>
+    <string name="add_lecturer">Engeza Umfundisi</string>
+    <string name="lecturer">Umfundisi</string>
+    <string name="reason">Isizathu</string>
+    <string name="extra_information">Imininingwane Eyengeziwe</string>
+    <string name="clear">Sula</string>
+    <string name="submit">Thumela</string>
+    <string name="late_submission_subject">Ukufaka Kamuva</string>
+    <string name="late_submission_email_body">Inombolo Yomfundi: %1$s\nUmfundisi: %2$s\nIsizathu: %3$s\nImininingwane Eyengeziwe: %4$s</string>
+    <string name="choose_email_app">Khetha uhlelo lokusebenza lwe-imeyili</string>
+    <string name="no_email_app_found">Akukho uhlelo lokusebenza lwe-imeyili olutholiwe. Sicela ufake uhlelo lokusebenza lwe-imeyili ukuze uthumele lo mlayezo.</string>
+    <string name="failed_to_submit_late_notification">Ihlulekile ukuthumela isaziso sokufika muva</string>
+    <string name="success">Impumelelo!</string>
+    <string name="late_submission_recorded">Ukufaka kwakho kamuva kurekhodiwe.</string>
+    <string name="ok">KULUNGILE</string>
+
+    <!--Main Activity-->
+    <string name="subscribed_to_parking_topic">Ubhalise esihlokweni sokupaka</string>
+    <string name="subscription_failed">Ukubhalisa kuhlulekile</string>
+    <string name="app_icon_description">Isithombe Sohlelo</string>
+    <string name="map_updates">Izibuyekezo Zemepu</string>
+    <string name="api_test">Ukuhlola kwe-API</string>
+
+    <!--Lecturer Details-->
+    <string name="add_lecturer_details">Faka Imininingwane Yomfundisi</string>
+    <string name="lecturer_name">Igama Lomfundisi</string>
+    <string name="lecturer_email">I-imeyili Yomfundisi</string>
+    <string name="lecturer_icon_description">Isithombe Somfundisi</string>
+    <string name="lecturer_added_successfully">Umfundisi ufakwe ngempumelelo!</string>
+    <string name="failed_to_add_lecturer">Kuhlulekile ukufaka umfundisi. Sicela uzame futhi.</string>
+    <string name="add">Faka</string>
+
+    <!-- Traffic Feedback Page Strings -->
+    <string name="message">Umyalezo</string>
+    <string name="category">Isigaba</string>
+    <string name="view_map_updates">Buka Izibuyekezo Zemephu</string>
+    <string name="recent_updates">Izibuyekezo Zakamuva</string>
+    <string name="failed_to_submit_feedback">Kwehlulekile ukuthumela impendulo: %1$s</string>
+    <string name="please_enter_message">Sicela ufake umyalezo ngaphambi kokuthumela.</string>
+
+</resources>

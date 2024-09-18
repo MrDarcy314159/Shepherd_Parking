@@ -3,6 +3,10 @@ package za.varsitycollege.shepherd_parking
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -19,6 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,10 +32,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
-import android.widget.Toast
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -70,7 +71,18 @@ fun LoginPage(navController: NavController) {
         }
     }
 
-    // Display the login form if the user is online or hasn't logged in before
+    // Check if user is already logged in
+    LaunchedEffect(Unit) {
+        if (userPreferences.isLoggedIn()) {
+            val userEmail = userPreferences.getLoggedInUserEmail()
+            if (userEmail == "admin@gmail.com") {
+                navController.navigate("guard_house")
+            } else {
+                navController.navigate("home")
+            }
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -102,20 +114,20 @@ fun LoginPage(navController: NavController) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = "SHEPHERD PARKING",
+                                text = stringResource(id = R.string.shepherd_parking_header),
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = AppColors.DarkGray
                             )
                             Text(
-                                text = "Login",
+                                text = stringResource(id = R.string.login),
                                 fontSize = 18.sp,
                                 color = AppColors.DarkGray
                             )
                         }
                         Image(
                             painter = painterResource(id = R.drawable.sheep),
-                            contentDescription = "Sheep Logo",
+                            contentDescription = stringResource(id = R.string.sheep_logo_description),
                             modifier = Modifier
                                 .size(60.dp)
                                 .clip(CircleShape)
@@ -140,7 +152,7 @@ fun LoginPage(navController: NavController) {
                     OutlinedTextField(
                         value = email,
                         onValueChange = { email = it },
-                        label = { Text("Email") },
+                        label = { Text(stringResource(id = R.string.email)) },
                         modifier = Modifier.fillMaxWidth(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = AppColors.MintGreen,
@@ -153,7 +165,7 @@ fun LoginPage(navController: NavController) {
                     OutlinedTextField(
                         value = password,
                         onValueChange = { password = it },
-                        label = { Text("Password") },
+                        label = { Text(stringResource(id = R.string.password)) },
                         visualTransformation = PasswordVisualTransformation(),
                         modifier = Modifier.fillMaxWidth(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -187,7 +199,7 @@ fun LoginPage(navController: NavController) {
                         colors = ButtonDefaults.buttonColors(containerColor = AppColors.MintGreen)
                     ) {
                         Text(
-                            text = "Login",
+                            text = stringResource(id = R.string.login),
                             color = Color.Black,
                             fontWeight = FontWeight.Bold
                         )
@@ -195,7 +207,7 @@ fun LoginPage(navController: NavController) {
 
                     if (showError) {
                         Text(
-                            text = "Invalid email or password",
+                            text = stringResource(id = R.string.invalid_email_or_password),
                             color = Color.Red,
                             modifier = Modifier.padding(top = 8.dp)
                         )
@@ -204,7 +216,7 @@ fun LoginPage(navController: NavController) {
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
-                        text = "Forgot Password?",
+                        text = stringResource(id = R.string.forgot_password),
                         color = Color.Black,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
@@ -218,12 +230,12 @@ fun LoginPage(navController: NavController) {
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = "Don't have an account?",
+                            text = stringResource(id = R.string.dont_have_account),
                             color = Color.Black,
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = "Sign Up",
+                            text = stringResource(id = R.string.sign_up),
                             color = Color.Blue,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.clickable {
@@ -248,7 +260,7 @@ fun LoginPage(navController: NavController) {
         // Varsity College logo at the bottom
         Image(
             painter = painterResource(id = R.drawable.varsity_college_icon),
-            contentDescription = "Varsity College Logo",
+            contentDescription = stringResource(R.string.varsity_college_logo_description),
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 16.dp)

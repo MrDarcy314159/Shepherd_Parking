@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationManagerCompat
@@ -37,10 +38,24 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
     var fingerprintSettings by remember { mutableStateOf(false) }
     var locationServices by remember { mutableStateOf(false) }
     var pushNotifications by remember { mutableStateOf(false) }
-    var selectedLanguage by remember { mutableStateOf("ENGLISH") }
+
     var expandedDropdown by remember { mutableStateOf(false) }
-    val languages = listOf("ENGLISH", "AFRIKAANS", "ZULU", "XHOSA")
+    var toastMessage by remember { mutableStateOf<String?>(null) }
+
     val context = LocalContext.current
+
+    val languageManager = remember { LanguageManager(context) }
+    var selectedLanguage by remember { mutableStateOf(languageManager.getLanguage()) }
+
+    val languages = listOf("en" to "English", "af" to "Afrikaans", "zu" to "Zulu")
+
+    // Show toast message
+    LaunchedEffect(toastMessage) {
+        toastMessage?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            toastMessage = null
+        }
+    }
 
     // Fetch the student's number from userManager when the page loads
     LaunchedEffect(Unit) {
@@ -51,7 +66,7 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                     studentNumber = fetchedStudentNumber
                 },
                 onFailure = {
-                    Toast.makeText(context, "Failed to load student number", Toast.LENGTH_SHORT).show()
+                    toastMessage = context.getString(R.string.failed_to_load_student_number)
                 }
             )
         }
@@ -111,7 +126,7 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
 
             // Settings Page Header
             Text(
-                text = "Settings:",
+                text = stringResource(R.string.settings),
                 style = MaterialTheme.typography.headlineMedium,
                 color = AppColors.DarkGray,
                 modifier = Modifier.padding(vertical = 0.dp)
@@ -130,7 +145,7 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Student Information",
+                        text = stringResource(R.string.student_information),
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold,
                         color = AppColors.DarkGray,
@@ -141,7 +156,7 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                     OutlinedTextField(
                         value = studentNumber,
                         onValueChange = { studentNumber = it },
-                        label = { Text("Student Number") },
+                        label = { Text(stringResource(R.string.student_number)) },
                         modifier = Modifier.fillMaxWidth(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = AppColors.MintGreen,
@@ -158,9 +173,9 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                             email?.let {
                                 if (studentNumber.isNotBlank()) {
                                     userManager.saveStudentNumber(it, studentNumber)
-                                    Toast.makeText(context, "Student number updated successfully!", Toast.LENGTH_SHORT).show()
+                                    toastMessage = context.getString(R.string.student_number_updated_successfully)
                                 } else {
-                                    Toast.makeText(context, "Student number cannot be empty", Toast.LENGTH_SHORT).show()
+                                    toastMessage = context.getString(R.string.student_number_cannot_be_empty)
                                 }
                             }
                         },
@@ -170,7 +185,7 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                         ),
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Update Student Number")
+                        Text(stringResource(R.string.update_student_number))
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -191,7 +206,7 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                                     uncheckedColor = AppColors.DarkGray
                                 )
                             )
-                            Text("Fingerprint", color = AppColors.DarkGray)
+                            Text(stringResource(R.string.fingerprint), color = AppColors.DarkGray)
                         }
 
                         Row(
@@ -205,7 +220,7 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                                     uncheckedColor = AppColors.DarkGray
                                 )
                             )
-                            Text("Facial Recognition", color = AppColors.DarkGray)
+                            Text(stringResource(R.string.facial_recognition), color = AppColors.DarkGray)
                         }
                     }
 
@@ -216,7 +231,7 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("Location Services", color = AppColors.DarkGray)
+                        Text(stringResource(R.string.location_services), color = AppColors.DarkGray)
                         Spacer(modifier = Modifier.width(12.dp))
                         Switch(
                             checked = locationServices,
@@ -238,7 +253,7 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("Push Notifications", color = AppColors.DarkGray)
+                        Text(stringResource(R.string.push_notifications), color = AppColors.DarkGray)
                         Spacer(modifier = Modifier.width(12.dp))
                         Switch(
                             checked = pushNotifications,
@@ -266,22 +281,21 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                         ),
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("View App Permissions")
+                        Text(stringResource(R.string.view_app_permissions))
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Language Selector with Dropdown Menu
                     Box {
                         OutlinedTextField(
-                            value = selectedLanguage,
+                            value = languages.find { it.first == selectedLanguage }?.second ?: "English",
                             onValueChange = {},
-                            label = { Text("Select Language") },
+                            label = { Text(stringResource(R.string.select_language)) },
                             readOnly = true,
                             trailingIcon = {
                                 Icon(
                                     imageVector = if (expandedDropdown) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                                    contentDescription = "Expand Language Selection",
+                                    contentDescription = stringResource(R.string.expand_language_selection),
                                     modifier = Modifier.clickable { expandedDropdown = !expandedDropdown }
                                 )
                             },
@@ -292,18 +306,20 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                             )
                         )
 
-                        // DropdownMenu for selecting a language
                         DropdownMenu(
                             expanded = expandedDropdown,
                             onDismissRequest = { expandedDropdown = false },
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            languages.forEach { language ->
+                            languages.forEach { (code, name) ->
                                 DropdownMenuItem(
-                                    text = { Text(language) },
+                                    text = { Text(name) },
                                     onClick = {
-                                        selectedLanguage = language
+                                        selectedLanguage = code
+                                        languageManager.setLanguage(code)
                                         expandedDropdown = false
+                                        // Recreate the activity to apply language change
+                                        (context as? MainActivity)?.recreate()
                                     }
                                 )
                             }
