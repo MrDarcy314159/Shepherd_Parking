@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -34,20 +35,22 @@ import com.google.firebase.messaging.FirebaseMessaging
 import za.varsitycollege.shepherd_parking.UserManager
 import za.varsitycollege.shepherd_parking.SettingsPage
 
-// Define a CompositionLocal for UserManager
 val LocalUserManager = compositionLocalOf<UserManager> { error("UserManager not provided") }
+val LocalLanguageManager = compositionLocalOf<LanguageManager> { error("LanguageManager not provided") }
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Subscribe to FCM topic
+        val languageManager = LanguageManager(this)
+        languageManager.setLanguage(languageManager.getLanguage())
+
         FirebaseMessaging.getInstance().subscribeToTopic("parking")
             .addOnCompleteListener { task ->
                 val msg = if (task.isSuccessful) {
-                    "Subscribed to parking topic"
+                    getString(R.string.subscribed_to_parking_topic)
                 } else {
-                    "Subscription failed"
+                    getString(R.string.subscription_failed)
                 }
                 Log.d("FCM", msg)
             }
@@ -64,7 +67,8 @@ class MainActivity : ComponentActivity() {
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
-        val userManager = remember { UserManager(context) }  // Creating the UserManager instance
+        val userManager = remember { UserManager(context) }
+        val languageManager = remember { LanguageManager(context) }
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -72,8 +76,10 @@ class MainActivity : ComponentActivity() {
         val routesWithoutTopBarAndDrawer = listOf("login", "newUser", "map_updates", "guard_house")
         val lightBlue = Color(0xFFE3F2FD)
 
-        // Provide the UserManager globally through CompositionLocalProvider
-        CompositionLocalProvider(LocalUserManager provides userManager) {
+        CompositionLocalProvider(
+            LocalUserManager provides userManager,
+            LocalLanguageManager provides languageManager
+        ) {
             ModalNavigationDrawer(
                 drawerState = drawerState,
                 drawerContent = {
@@ -93,13 +99,13 @@ class MainActivity : ComponentActivity() {
                                 ) {
                                     Icon(
                                         painter = painterResource(id = R.drawable.sheep),
-                                        contentDescription = "App Icon",
+                                        contentDescription = stringResource(R.string.app_icon_description),
                                         modifier = Modifier.size(80.dp),
                                         tint = Color.Unspecified
                                     )
                                     Spacer(modifier = Modifier.height(8.dp))
                                     Text(
-                                        text = "Shepherd Parking",
+                                        text = stringResource(R.string.app_name),
                                         color = Color.Black,
                                         style = MaterialTheme.typography.bodySmall
                                     )
@@ -107,7 +113,7 @@ class MainActivity : ComponentActivity() {
                             }
                             NavigationDrawerItem(
                                 icon = { Icon(Icons.Default.Home, contentDescription = null) },
-                                label = { Text("Home") },
+                                label = { Text(stringResource(R.string.home)) },
                                 selected = currentRoute == "home",
                                 onClick = {
                                     navController.navigate("home")
@@ -116,7 +122,7 @@ class MainActivity : ComponentActivity() {
                             )
                             NavigationDrawerItem(
                                 icon = { Icon(Icons.Default.Settings, contentDescription = null) },
-                                label = { Text("Settings") },
+                                label = { Text(stringResource(R.string.settings)) },
                                 selected = currentRoute == "settings",
                                 onClick = {
                                     navController.navigate("settings")
@@ -124,13 +130,8 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                             NavigationDrawerItem(
-                                icon = {
-                                    Icon(
-                                        Icons.Default.CheckCircle,
-                                        contentDescription = null
-                                    )
-                                },
-                                label = { Text("Check In") },
+                                icon = { Icon(Icons.Default.CheckCircle, contentDescription = null) },
+                                label = { Text(stringResource(R.string.check_in)) },
                                 selected = currentRoute == "check_in",
                                 onClick = {
                                     navController.navigate("check_in")
@@ -139,7 +140,7 @@ class MainActivity : ComponentActivity() {
                             )
                             NavigationDrawerItem(
                                 icon = { Icon(Icons.Default.Share, contentDescription = null) },
-                                label = { Text("Traffic Feedback") },
+                                label = { Text(stringResource(R.string.traffic_feedback)) },
                                 selected = currentRoute == "traffic_feedback",
                                 onClick = {
                                     navController.navigate("traffic_feedback")
@@ -148,7 +149,7 @@ class MainActivity : ComponentActivity() {
                             )
                             NavigationDrawerItem(
                                 icon = { Icon(Icons.Default.Email, contentDescription = null) },
-                                label = { Text("Late") },
+                                label = { Text(stringResource(R.string.late)) },
                                 selected = currentRoute == "late",
                                 onClick = {
                                     navController.navigate("late")
@@ -157,7 +158,7 @@ class MainActivity : ComponentActivity() {
                             )
                             NavigationDrawerItem(
                                 icon = { Icon(Icons.Default.DateRange, contentDescription = null) },
-                                label = { Text("Analytics") },
+                                label = { Text(stringResource(R.string.analytics)) },
                                 selected = currentRoute == "analytics",
                                 onClick = {
                                     navController.navigate("analytics")
@@ -165,13 +166,8 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                             NavigationDrawerItem(
-                                icon = {
-                                    Icon(
-                                        Icons.Default.LocationOn,
-                                        contentDescription = null
-                                    )
-                                },
-                                label = { Text("Map Updates") },
+                                icon = { Icon(Icons.Default.LocationOn, contentDescription = null) },
+                                label = { Text(stringResource(R.string.map_updates)) },
                                 selected = currentRoute == "map_updates",
                                 onClick = {
                                     navController.navigate("map_updates")
@@ -180,7 +176,7 @@ class MainActivity : ComponentActivity() {
                             )
                             NavigationDrawerItem(
                                 icon = { Icon(Icons.Default.Face, contentDescription = null) },
-                                label = { Text("Guard House") },
+                                label = { Text(stringResource(R.string.guard_house)) },
                                 selected = false,
                                 onClick = {
                                     navController.navigate("guard_house") {
@@ -191,22 +187,10 @@ class MainActivity : ComponentActivity() {
                             )
                             NavigationDrawerItem(
                                 icon = { Icon(Icons.Default.Lock, contentDescription = null) },
-                                label = { Text("Logout") },
+                                label = { Text(stringResource(R.string.logout)) },
                                 selected = false,
                                 onClick = {
                                     navController.navigate("signUp") {
-                                        popUpTo(0)
-                                    }
-                                    scope.launch { drawerState.close() }
-                                }
-                            )
-
-                            NavigationDrawerItem(
-                                icon = { Icon(Icons.Default.Lock, contentDescription = null) },
-                                label = { Text("API Test") },
-                                selected = false,
-                                onClick = {
-                                    navController.navigate("api_test") {
                                         popUpTo(0)
                                     }
                                     scope.launch { drawerState.close() }
@@ -220,10 +204,10 @@ class MainActivity : ComponentActivity() {
                     topBar = {
                         if (currentRoute !in routesWithoutTopBarAndDrawer) {
                             TopAppBar(
-                                title = { Text("Menu") },
+                                title = { Text(stringResource(R.string.menu)) },
                                 navigationIcon = {
                                     IconButton(onClick = { scope.launch { drawerState.open() } }) {
-                                        Icon(Icons.Default.Menu, contentDescription = "Menu")
+                                        Icon(Icons.Default.Menu, contentDescription = stringResource(R.string.menu))
                                     }
                                 },
                                 colors = TopAppBarDefaults.topAppBarColors(
@@ -245,30 +229,15 @@ class MainActivity : ComponentActivity() {
                             composable("signUp") { SignUpPage(navController) }
                             composable("login") { LoginPage(navController) }
                             composable("newUser") { NewUserPage(navController) }
-                            //UPDATED This
-                            composable("home") {
-                                HomePage(
-                                    navController,
-                                    userManager = LocalUserManager.current
-                                )
-                            }
-                            composable("settings") { SettingsPage(navController,userManager) }
+                            composable("home") { HomePage(navController, userManager = LocalUserManager.current) }
+                            composable("settings") { SettingsPage(navController, userManager) }
                             composable("check_in") { CheckInPage(navController) }
-
-                            //UPDATED This
-                            composable("traffic_feedback") {
-                                TrafficFeedbackPage(
-                                    navController,
-                                    userManager
-                                )
-                            }
-
+                            composable("traffic_feedback") { TrafficFeedbackPage(navController, userManager) }
                             composable("late") { Late_Page(navController) }
                             composable("analytics") { AnalyticsPage(navController) }
                             composable("map_updates") { MapUpdatesPage(navController) }
                             composable("guard_house") { GuardHousePage(navController) }
                             composable("lecturer_details") { LecturerDetailsPage() }
-                            composable("api_test") { ApiTestPage(navController) }
                         }
                     }
                 }
