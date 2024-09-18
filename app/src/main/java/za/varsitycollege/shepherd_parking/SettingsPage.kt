@@ -278,6 +278,7 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Box {
+                        // Fixed error
                         OutlinedTextField(
                             value = languages.find { it.first == selectedLanguage }?.second ?: "English",
                             onValueChange = {},
