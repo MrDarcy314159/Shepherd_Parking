@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Existing strings -->
     <string name="app_name">Shepherd Parking</string>
     <string name="sheep_logo_description">Sheep Logo</string>
     <string name="parking_status">Parking Status:</string>
@@ -15,6 +16,7 @@
     <string name="sign_in">Sign In</string>
     <string name="cancel">Cancel</string>
 
+    <!-- Settings -->
     <string name="settings">Settings:</string>
     <string name="student_information">Student Information</string>
     <string name="student_number">Student Number</string>
@@ -29,5 +31,137 @@
     <string name="failed_to_load_student_number">Failed to load student number</string>
     <string name="student_number_updated_successfully">Student number updated successfully!</string>
     <string name="student_number_cannot_be_empty">Student number cannot be empty</string>
-</resources>
 
+    <!-- Login Page Strings -->
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="invalid_email_or_password">Invalid email or password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="dont_have_account">Don\'t have an account?</string>
+    <string name="shepherd_parking_header">SHEPHERD PARKING</string>
+    <string name="home">Home</string>
+
+    <!-- Map Updates Strings -->
+    <string name="map_updates_header">Map Updates (Last 24 Hours)</string>
+    <string name="loading">Loading...</string>
+    <string name="no_feedback_data">No feedback data available for the last 24 hours</string>
+    <string name="error_loading_feedback">Error loading feedback: %1$s</string>
+    <string name="legend">Legend</string>
+    <string name="accident">Accident</string>
+    <string name="heavy_traffic">Heavy Traffic</string>
+    <string name="road_construction">Road Construction</string>
+    <string name="other">Other</string>
+    <string name="feedback_from">Feedback from %1$s</string>
+    <string name="menu">Menu</string>
+
+    <!-- New User Page -->
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="this_field_is_required">This field is required</string>
+    <string name="thanks_for_signing_up">Thanks for signing up!</string>
+    <string name="already_have_account">Already have an account?</string>
+    <string name="varsity_college_logo">Varsity College Logo</string>
+
+    <!-- Guard House-->
+    <string name="language_updated">Language updated to %1$s</string>
+    <string name="guard_house">Guard House</string>
+    <string name="logout">Logout</string>
+    <string name="reset_car_count">Reset Car Count</string>
+    <string name="confirm_reset">Confirm Reset</string>
+    <string name="reset_message">Are you sure you would like to reset the car count?</string>
+    <string name="yes">Yes</string>
+    <string name="cars_on_campus">Cars on Campus: %1$d</string>
+    <string name="add_car">Add Car:</string>
+    <string name="minus_car">Minus Car:</string>
+
+    <!-- Analytics-->
+    <string name="analytics">Analytics</string>
+    <string name="projected_morning_capacity">Projected Capacity for Tomorrow Morning</string>
+    <string name="projected_afternoon_capacity">Projected Capacity for Tomorrow Afternoon</string>
+    <string name="full">% FULL</string>
+    <string name="projected_capacity_chart">Projected capacity for tomorrow</string>
+    <string name="time_slots">Time Slots</string>
+
+    <!--Check In-->
+    <string name="morning">Morning</string>
+    <string name="afternoon">Afternoon</string>
+    <string name="select_time_morning_afternoon">Select Time (Morning/Afternoon)</string>
+    <string name="select_specific_time_slot">Select Specific Time Slot</string>
+    <string name="checked_in">Checked In</string>
+    <string name="check_in_status">Check-In Status</string>
+    <string name="checked_in_for_tomorrow">You are checked in for tomorrow %s.</string>
+    <string name="not_checked_in">Not Checked In</string>
+    <string name="not_checked_in_yet">You are not checked in yet.</string>
+    <string name="remove_check_in">Remove Check In</string>
+    <string name="check_in_success_message">Thank you for checking in to campus parking. See you tomorrow!</string>
+    <string name="check_in_removed_successfully">Check-In status removed successfully.</string>
+    <string name="no_check_in_record_found">No check-in record found to remove.</string>
+    <string name="already_checked_in_today">You have already checked in today.</string>
+
+    <!--Home Page-->
+    <string name="home_page">Home Page</string>
+    <string name="parking_availability">Parking Availability : %d%% FULL</string>
+    <string name="check_in">Check In</string>
+    <string name="check_in_explanation">Record your arrival at the parking area</string>
+    <string name="traffic_feedback">Traffic Feedback</string>
+    <string name="traffic_feedback_explanation">Report current traffic conditions</string>
+    <string name="late_notification">Late Notification</string>
+    <string name="late">Late</string>
+    <string name="late_explanation">Notify if you\'re running late</string>
+    <string name="analytics_explanation">View parking usage statistics</string>
+    <string name="enter_student_number">Enter Student Number</string>
+    <string name="enter_student_number_explanation">Please enter your student number to complete your registration.</string>
+    <string name="save">Save</string>
+    <string name="failed_to_read_car_count">Failed to read car count</string>
+    <string name="failed_to_read_max_car_count">Failed to read maximum car count</string>
+    <string name="failed_to_load_initial_data">Failed to load initial data</string>
+    <string name="failed_to_check_date">Failed to check date</string>
+
+    <!--Late Page-->
+    <string name="select_lecturer">Select Lecturer</string>
+    <string name="select_reason">Select Reason</string>
+    <string name="failed_to_fetch_student_number">Failed to fetch student number</string>
+    <string name="reason_traffic">Traffic</string>
+    <string name="reason_accident">Accident</string>
+    <string name="reason_other">Other</string>
+    <string name="robot_icon_description">Robot Icon</string>
+    <string name="add_lecturer">Add Lecturer</string>
+    <string name="lecturer">Lecturer</string>
+    <string name="reason">Reason</string>
+    <string name="extra_information">Extra Information</string>
+    <string name="clear">Clear</string>
+    <string name="submit">Submit</string>
+    <string name="late_submission_subject">Late Submission</string>
+    <string name="late_submission_email_body">Student Number: %1$s\nLecturer: %2$s\nReason: %3$s\nExtra Information: %4$s</string>
+    <string name="choose_email_app">Choose an email app</string>
+    <string name="no_email_app_found">No email app found. Please install an email app to send this message.</string>
+    <string name="failed_to_submit_late_notification">Failed to submit late notification</string>
+    <string name="success">Success!</string>
+    <string name="late_submission_recorded">Your late submission has been recorded.</string>
+    <string name="ok">OK</string>
+
+    <!--Main Activity-->
+    <string name="subscribed_to_parking_topic">Subscribed to parking topic</string>
+    <string name="subscription_failed">Subscription failed</string>
+    <string name="app_icon_description">App Icon</string>
+    <string name="map_updates">Map Updates</string>
+    <string name="api_test">API Test</string>
+
+    <!--Lecturer Details-->
+    <string name="add_lecturer_details">Add Lecturer Details</string>
+    <string name="lecturer_name">Lecturer Name</string>
+    <string name="lecturer_email">Lecturer E-mail</string>
+    <string name="lecturer_icon_description">Lecturer Icon</string>
+    <string name="lecturer_added_successfully">Lecturer added successfully!</string>
+    <string name="failed_to_add_lecturer">Failed to add lecturer. Please try again.</string>
+    <string name="add">Add</string>
+
+    <!-- Traffic Feedback Page Strings -->
+    <string name="message">Message</string>
+    <string name="category">Category</string>
+    <string name="view_map_updates">View Map Updates</string>
+    <string name="recent_updates">Recent Updates</string>
+    <string name="failed_to_submit_feedback">Failed to submit feedback: %1$s</string>
+    <string name="please_enter_message">Please enter a message before submitting.</string>
+
+</resources>

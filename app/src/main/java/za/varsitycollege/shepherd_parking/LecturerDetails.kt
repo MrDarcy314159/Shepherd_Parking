@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -78,20 +79,20 @@ fun LecturerDetailsPage() {
                         Spacer(modifier = Modifier.width(8.dp))
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = "SHEPHERD PARKING",
+                                text = stringResource(R.string.app_name),
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = AppColors.DarkGray
                             )
                             Text(
-                                text = "Add Lecturer Details",
+                                text = stringResource(R.string.add_lecturer_details),
                                 fontSize = 18.sp,
                                 color = AppColors.DarkGray
                             )
                         }
                         Image(
-                            painter = painterResource(id = R.drawable.sheep), // Replace with your actual resource
-                            contentDescription = "Sheep Logo",
+                            painter = painterResource(id = R.drawable.sheep),
+                            contentDescription = stringResource(R.string.sheep_logo_description),
                             modifier = Modifier
                                 .size(60.dp)
                                 .clip(CircleShape)
@@ -116,7 +117,7 @@ fun LecturerDetailsPage() {
                     OutlinedTextField(
                         value = lecturerName,
                         onValueChange = { lecturerName = it },
-                        label = { Text("Lecturer Name") },
+                        label = { Text(stringResource(R.string.lecturer_name)) },
                         modifier = Modifier.fillMaxWidth(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = AppColors.MintGreen,
@@ -129,7 +130,7 @@ fun LecturerDetailsPage() {
                     OutlinedTextField(
                         value = lecturerEmail,
                         onValueChange = { lecturerEmail = it },
-                        label = { Text("Lecturer E-mail") },
+                        label = { Text(stringResource(R.string.lecturer_email)) },
                         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
                         modifier = Modifier.fillMaxWidth(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -159,7 +160,7 @@ fun LecturerDetailsPage() {
                                 colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                                 border = BorderStroke(2.dp, AppColors.DarkGray)
                             ) {
-                                Text("Clear", color = Color.Black)
+                                Text(stringResource(R.string.clear), color = Color.Black)
                             }
 
                             Spacer(modifier = Modifier.height(16.dp))
@@ -193,7 +194,7 @@ fun LecturerDetailsPage() {
                                 colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                                 border = BorderStroke(2.dp, AppColors.DarkGray)
                             ) {
-                                Text("Add", color = Color.Black)
+                                Text(stringResource(R.string.add), color = Color.Black)
                             }
                         }
 
@@ -201,8 +202,8 @@ fun LecturerDetailsPage() {
 
                         // Lecturer Icon to the right of the buttons
                         Image(
-                            painter = painterResource(id = R.drawable.lecturer_icon), // Replace with actual resource
-                            contentDescription = "Lecturer Icon",
+                            painter = painterResource(id = R.drawable.lecturer_icon),
+                            contentDescription = stringResource(R.string.lecturer_icon_description),
                             modifier = Modifier.size(90.dp),
                         )
                     }
@@ -215,7 +216,7 @@ fun LecturerDetailsPage() {
     if (showSuccessDialog) {
         CustomDialog(
             onDismissRequest = { showSuccessDialog = false },
-            message = "Lecturer added successfully!",
+            message = stringResource(R.string.lecturer_added_successfully),
             backgroundColor = AppColors.MintGreen
         )
     }
@@ -224,7 +225,7 @@ fun LecturerDetailsPage() {
     if (showErrorDialog) {
         CustomDialog(
             onDismissRequest = { showErrorDialog = false },
-            message = "Failed to add lecturer. Please try again.",
+            message = stringResource(R.string.failed_to_add_lecturer),
             backgroundColor = Color.Red
         )
     }
@@ -263,7 +264,7 @@ fun CustomDialog(
                     ),
                     border = BorderStroke(2.dp, AppColors.DarkGray)
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.ok))
                 }
             }
         }

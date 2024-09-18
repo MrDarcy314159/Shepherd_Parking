@@ -47,7 +47,7 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
     val languageManager = remember { LanguageManager(context) }
     var selectedLanguage by remember { mutableStateOf(languageManager.getLanguage()) }
 
-    val languages = listOf("en" to "English", "af" to "Afrikaans", "zu" to "Zulu", "xh" to "Xhosa")
+    val languages = listOf("en" to "English", "af" to "Afrikaans", "zu" to "Zulu")
 
     // Show toast message
     LaunchedEffect(toastMessage) {

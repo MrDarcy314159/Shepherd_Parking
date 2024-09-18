@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,17 +31,35 @@ import com.google.firebase.ktx.Firebase
 fun Late_Page(navController: NavController) {
     val context = LocalContext.current
     var studentNumber by remember { mutableStateOf("ST10000001") }
-    var selectedLecturer by remember { mutableStateOf("Select Lecturer") }
-    var selectedReason by remember { mutableStateOf("Select Reason") }
+    var selectedLecturer by remember { mutableStateOf("") }
+    var selectedReason by remember { mutableStateOf("") }
     var extraInformation by remember { mutableStateOf("") }
     var lecturerDropdownExpanded by remember { mutableStateOf(false) }
     var reasonDropdownExpanded by remember { mutableStateOf(false) }
     var showSuccessDialog by remember { mutableStateOf(false) }
     var lecturers by remember { mutableStateOf(listOf<String>()) }
-    var lecturerEmail by remember { mutableStateOf("") }  // State to store lecturer's email
+    var lecturerEmail by remember { mutableStateOf("") }
+    var toastMessage by remember { mutableStateOf<String?>(null) }
 
     val firestore: FirebaseFirestore = Firebase.firestore
     val userManager = UserManager(context)
+
+    val selectLecturerString = stringResource(R.string.select_lecturer)
+    val selectReasonString = stringResource(R.string.select_reason)
+
+    // Initialize selectedLecturer and selectedReason
+    LaunchedEffect(Unit) {
+        selectedLecturer = selectLecturerString
+        selectedReason = selectReasonString
+    }
+
+    // Show toast message
+    LaunchedEffect(toastMessage) {
+        toastMessage?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            toastMessage = null
+        }
+    }
 
     // Fetch student number and lecturers
     LaunchedEffect(Unit) {
@@ -54,12 +73,15 @@ fun Late_Page(navController: NavController) {
                     lecturers = querySnapshot.documents.mapNotNull { it.getString("name") }
                 }
         }, onFailure = {
-            // Handle failure in fetching student number
-            Toast.makeText(context, "Failed to fetch student number", Toast.LENGTH_SHORT).show()
+            toastMessage = context.getString(R.string.failed_to_fetch_student_number)
         })
     }
 
-    val reasons = listOf("Traffic", "Accident", "Other")
+    val reasons = listOf(
+        stringResource(R.string.reason_traffic),
+        stringResource(R.string.reason_accident),
+        stringResource(R.string.reason_other)
+    )
 
     Box(
         modifier = Modifier
@@ -90,20 +112,20 @@ fun Late_Page(navController: NavController) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = "SHEPHERD PARKING",
+                                text = stringResource(R.string.app_name),
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = AppColors.DarkGray
                             )
                             Text(
-                                text = "Late",
+                                text = stringResource(R.string.late),
                                 fontSize = 18.sp,
                                 color = AppColors.DarkGray
                             )
                         }
                         Image(
                             painter = painterResource(id = R.drawable.sheep),
-                            contentDescription = "Sheep Logo",
+                            contentDescription = stringResource(R.string.sheep_logo_description),
                             modifier = Modifier
                                 .size(60.dp)
                                 .clip(CircleShape)
@@ -127,7 +149,7 @@ fun Late_Page(navController: NavController) {
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.robot_icon),
-                        contentDescription = "Robot Icon",
+                        contentDescription = stringResource(R.string.robot_icon_description),
                         modifier = Modifier.size(80.dp)
                     )
 
@@ -141,7 +163,7 @@ fun Late_Page(navController: NavController) {
                             .padding(bottom = 16.dp),
                         colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.DarkGray)
                     ) {
-                        Text("Add Lecturer")
+                        Text(stringResource(R.string.add_lecturer))
                     }
 
                     // Lecturer Dropdown
@@ -153,7 +175,7 @@ fun Late_Page(navController: NavController) {
                             value = selectedLecturer,
                             onValueChange = {},
                             readOnly = true,
-                            label = { Text("Lecturer") },
+                            label = { Text(stringResource(R.string.lecturer)) },
                             trailingIcon = {
                                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = lecturerDropdownExpanded)
                             },
@@ -201,7 +223,7 @@ fun Late_Page(navController: NavController) {
                             value = selectedReason,
                             onValueChange = {},
                             readOnly = true,
-                            label = { Text("Reason") },
+                            label = { Text(stringResource(R.string.reason)) },
                             trailingIcon = {
                                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = reasonDropdownExpanded)
                             },
@@ -235,7 +257,7 @@ fun Late_Page(navController: NavController) {
                     OutlinedTextField(
                         value = extraInformation,
                         onValueChange = { extraInformation = it },
-                        label = { Text("Extra Information") },
+                        label = { Text(stringResource(R.string.extra_information)) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(75.dp),
@@ -258,8 +280,8 @@ fun Late_Page(navController: NavController) {
                             Button(
                                 onClick = {
                                     // Clear the fields
-                                    selectedLecturer = "Select Lecturer"
-                                    selectedReason = "Select Reason"
+                                    selectedLecturer = selectLecturerString
+                                    selectedReason = selectReasonString
                                     extraInformation = ""
                                 },
                                 modifier = Modifier.fillMaxWidth(),
@@ -270,15 +292,15 @@ fun Late_Page(navController: NavController) {
                                 ),
                                 border = BorderStroke(2.dp, AppColors.DarkGray)
                             ) {
-                                Text("Clear")
+                                Text(stringResource(R.string.clear))
                             }
 
                             Spacer(modifier = Modifier.height(8.dp))
 
                             Button(
                                 onClick = {
-                                    if (selectedLecturer != "Select Lecturer" &&
-                                        selectedReason != "Select Reason" &&
+                                    if (selectedLecturer != selectLecturerString &&
+                                        selectedReason != selectReasonString &&
                                         extraInformation.isNotBlank()
                                     ) {
                                         // Save data to Firestore
@@ -297,32 +319,30 @@ fun Late_Page(navController: NavController) {
                                                 // Create email intent using ACTION_SEND
                                                 val emailIntent = Intent(Intent.ACTION_SEND).apply {
                                                     type = "text/plain"
-                                                    putExtra(Intent.EXTRA_EMAIL, arrayOf(lecturerEmail)) // Use the lecturer's email
-                                                    putExtra(Intent.EXTRA_SUBJECT, "Late Submission")
+                                                    putExtra(Intent.EXTRA_EMAIL, arrayOf(lecturerEmail))
+                                                    putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.late_submission_subject))
                                                     putExtra(
                                                         Intent.EXTRA_TEXT,
-                                                        "Student Number: $studentNumber\n" +
-                                                                "Lecturer: $selectedLecturer\n" +
-                                                                "Reason: $selectedReason\n" +
-                                                                "Extra Information: $extraInformation"
+                                                        context.getString(
+                                                            R.string.late_submission_email_body,
+                                                            studentNumber,
+                                                            selectedLecturer,
+                                                            selectedReason,
+                                                            extraInformation
+                                                        )
                                                     )
                                                 }
                                                 // Use a chooser to allow the user to select the app
                                                 if (emailIntent.resolveActivity(context.packageManager) != null) {
                                                     context.startActivity(
-                                                        Intent.createChooser(emailIntent, "Choose an email app")
+                                                        Intent.createChooser(emailIntent, context.getString(R.string.choose_email_app))
                                                     )
                                                 } else {
-                                                    // Display a toast message if no email app is available
-                                                    Toast.makeText(
-                                                        context,
-                                                        "No email app found. Please install an email app to send this message.",
-                                                        Toast.LENGTH_LONG
-                                                    ).show()
+                                                    toastMessage = context.getString(R.string.no_email_app_found)
                                                 }
                                             }
                                             .addOnFailureListener {
-                                                // Handle failure
+                                                toastMessage = context.getString(R.string.failed_to_submit_late_notification)
                                             }
                                     }
                                 },
@@ -334,7 +354,7 @@ fun Late_Page(navController: NavController) {
                                 ),
                                 border = BorderStroke(2.dp, AppColors.DarkGray)
                             ) {
-                                Text("Submit")
+                                Text(stringResource(R.string.submit))
                             }
                         }
                     }
@@ -353,14 +373,14 @@ fun Late_Page(navController: NavController) {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = "Success!",
+                                text = stringResource(R.string.success),
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = AppColors.DarkGray
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = "Your late submission has been recorded.",
+                                text = stringResource(R.string.late_submission_recorded),
                                 fontSize = 16.sp,
                                 color = AppColors.DarkGray
                             )
@@ -372,7 +392,7 @@ fun Late_Page(navController: NavController) {
                                     contentColor = Color.White
                                 )
                             ) {
-                                Text("OK")
+                                Text(stringResource(R.string.ok))
                             }
                         }
                     }

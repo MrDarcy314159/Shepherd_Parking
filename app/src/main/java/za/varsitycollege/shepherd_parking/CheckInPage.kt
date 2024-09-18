@@ -22,24 +22,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.getValue
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import kotlin.math.log
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,21 +53,29 @@ fun CheckInPage(navController: NavController) {
     var removeSuccess by remember { mutableStateOf(false) }
     var showDropdown by remember { mutableStateOf(false) }
     var checkInAllowed by remember { mutableStateOf(true) }
-    val options = listOf("Morning", "Afternoon")
     var showAlreadyCheckedInDialog by remember { mutableStateOf(false) }
+    var toastMessage by remember { mutableStateOf<String?>(null) }
 
-    // Time slot options for morning and afternoon
+    val morningString = stringResource(R.string.morning)
+    val afternoonString = stringResource(R.string.afternoon)
+    val options = listOf(morningString, afternoonString)
+
+    // Show toast message
+    LaunchedEffect(toastMessage) {
+        toastMessage?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            toastMessage = null
+        }
+    }
+
     val morningTimeSlots = listOf("7:00-8:00", "8:00-9:00", "9:00-10:00", "10:00-11:00", "11:00-12:00")
     val afternoonTimeSlots = listOf("12:00-13:00", "13:00-14:00", "14:00-15:00", "15:00-16:00", "16:00-17:00")
 
-    // State to manage time slot dropdown visibility and selection
     var timeSlot by remember { mutableStateOf("") }
     var showTimeSlotDropdown by remember { mutableStateOf(false) }
 
-    // Initialize the UserManager with context
     val userManager = remember { UserManager(context) }
 
-    // Load user data from UserManager
     LaunchedEffect(user) {
         user?.email?.let { email ->
             userManager.fetchUserDetails(email) { fetchedUser ->
@@ -84,18 +87,13 @@ fun CheckInPage(navController: NavController) {
                 }
             }
 
-            // Check if user has checked in today
             val todayDate = getTodayDate()
             db.collection("check_in")
                 .whereEqualTo("stdNumber", studentNumber)
                 .whereEqualTo("date", todayDate)
                 .get()
                 .addOnSuccessListener { result ->
-                    if (result.isEmpty){
-                        checkInAllowed = true
-                    } else{
-                        checkInAllowed = false
-                    }
+                    checkInAllowed = result.isEmpty
                 }
                 .addOnFailureListener {
                     checkInAllowed = false
@@ -103,28 +101,22 @@ fun CheckInPage(navController: NavController) {
         }
     }
 
-    //testing to the logcat
-    Log.d("Check_In 1","Check In Status : $checkInAllowed")
-
-    // Check if user has checked in today
     val todayDate = getTodayDate()
     Log.d("Time Function", "Today's Date Function: $todayDate")
 
-    //get the check in time from the database as well as check-in allowed ?
     db.collection("check_in")
         .whereEqualTo("stdNumber", studentNumber)
         .whereEqualTo("date", todayDate)
         .get()
         .addOnSuccessListener { result ->
-            // Check if any documents are returned
             if (!result.isEmpty) {
                 for (query in result.documents) {
                     checkInTime = query.getString("time") ?: ""
                     Log.d("Check_In", "Check-in time: $checkInTime")
                 }
-                checkInAllowed = false  // If a document is found, check-in is not allowed again for the day
+                checkInAllowed = false
             } else {
-                checkInAllowed = true  // If no documents are found, check-in is allowed
+                checkInAllowed = true
             }
             Log.d("Check_In 2", "Check-in allowed: $checkInAllowed")
         }
@@ -133,12 +125,10 @@ fun CheckInPage(navController: NavController) {
             Log.e("Check_In 3", "Error checking in status", exception)
         }
 
-    // Firebase Database reference
     val database: FirebaseDatabase = FirebaseDatabase.getInstance()
     val morningCarCountRef: DatabaseReference = database.getReference("projectedMorningCars")
     val afternoonCarCountRef: DatabaseReference = database.getReference("projectedAfternoonCars")
 
-    //time slots
     val timeSlotsRef1: DatabaseReference = database.getReference("timeSlots/sevenToEight")
     val timeSlotsRef2: DatabaseReference = database.getReference("timeSlots/eightToNine")
     val timeSlotsRef3: DatabaseReference = database.getReference("timeSlots/nineToTen")
@@ -150,11 +140,9 @@ fun CheckInPage(navController: NavController) {
     val timeSlotsRef9: DatabaseReference = database.getReference("timeSlots/threeToFour")
     val timeSlotsRef10: DatabaseReference = database.getReference("timeSlots/fourToFive")
 
-    // Remember the car count state
     val morningCarCount = remember { mutableStateOf(0) }
     val afternoonCarCount = remember { mutableStateOf(0) }
 
-    //timeslots
     val timeSlots1 = remember { mutableStateOf(0) }
     val timeSlots2 = remember { mutableStateOf(0) }
     val timeSlots3 = remember { mutableStateOf(0) }
@@ -166,14 +154,12 @@ fun CheckInPage(navController: NavController) {
     val timeSlots9 = remember { mutableStateOf(0) }
     val timeSlots10 = remember { mutableStateOf(0) }
 
-    // Load initial car count from Firebase
     LaunchedEffect(Unit) {
         val morningSnapshot = morningCarCountRef.get().await()
         morningCarCount.value = morningSnapshot.getValue(Int::class.java) ?: 0
         val afternoonSnapshot = afternoonCarCountRef.get().await()
         afternoonCarCount.value = afternoonSnapshot.getValue(Int::class.java) ?: 0
 
-        //time slots
         val timeSlot1Snapshot = timeSlotsRef1.get().await()
         timeSlots1.value = timeSlot1Snapshot.getValue(Int::class.java) ?: 0
 
@@ -234,20 +220,20 @@ fun CheckInPage(navController: NavController) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = "SHEPHERD PARKING",
+                                text = stringResource(R.string.app_name),
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = AppColors.DarkGray
                             )
                             Text(
-                                text = "Check In",
+                                text = stringResource(R.string.check_in),
                                 fontSize = 18.sp,
                                 color = AppColors.DarkGray
                             )
                         }
                         Image(
                             painter = painterResource(id = R.drawable.sheep),
-                            contentDescription = "Sheep Logo",
+                            contentDescription = stringResource(R.string.sheep_logo_description),
                             modifier = Modifier
                                 .size(60.dp)
                                 .clip(CircleShape)
@@ -295,7 +281,7 @@ fun CheckInPage(navController: NavController) {
                             Spacer(modifier = Modifier.height(4.dp))
 
                             Text(
-                                text = "$studentNumber",
+                                text = studentNumber,
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White,
@@ -313,7 +299,7 @@ fun CheckInPage(navController: NavController) {
                             colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = AppColors.DarkGray),
                             border = BorderStroke(2.dp, AppColors.DarkGray)
                         ) {
-                            Text(if (time.isEmpty()) "Select Time (Morning/Afternoon)" else time)
+                            Text(if (time.isEmpty()) stringResource(R.string.select_time_morning_afternoon) else time)
                         }
                         DropdownMenu(
                             expanded = showDropdown,
@@ -326,7 +312,6 @@ fun CheckInPage(navController: NavController) {
                                     onClick = {
                                         time = option
                                         showDropdown = false
-                                        // Clear time slot when new time (Morning/Afternoon) is selected
                                         timeSlot = ""
                                     }
                                 )
@@ -337,7 +322,7 @@ fun CheckInPage(navController: NavController) {
                     Spacer(modifier = Modifier.height(16.dp))
 
                     // Conditionally display the time slots based on Morning or Afternoon selection
-                    if (time == "Morning" || time == "Afternoon") {
+                    if (time == morningString || time == afternoonString) {
                         Box(modifier = Modifier.fillMaxWidth()) {
                             Button(
                                 onClick = { showTimeSlotDropdown = !showTimeSlotDropdown },
@@ -346,14 +331,14 @@ fun CheckInPage(navController: NavController) {
                                 colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = AppColors.DarkGray),
                                 border = BorderStroke(2.dp, AppColors.DarkGray)
                             ) {
-                                Text(if (timeSlot.isEmpty()) "Select Specific Time Slot" else timeSlot)
+                                Text(if (timeSlot.isEmpty()) stringResource(R.string.select_specific_time_slot) else timeSlot)
                             }
                             DropdownMenu(
                                 expanded = showTimeSlotDropdown,
                                 onDismissRequest = { showTimeSlotDropdown = false },
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                val timeSlots = if (time == "Morning") morningTimeSlots else afternoonTimeSlots
+                                val timeSlots = if (time == morningString) morningTimeSlots else afternoonTimeSlots
                                 timeSlots.forEach { slot ->
                                     DropdownMenuItem(
                                         text = { Text(slot) },
@@ -373,11 +358,10 @@ fun CheckInPage(navController: NavController) {
                         onClick = {
                             if (time.isNotBlank() && timeSlot.isNotBlank()) {
                                 if (checkInAllowed) {
-
                                     var timeSlotString = ""
 
                                     // Proceed with check-in logic and storing data in Firestore
-                                    if (time == "Morning") {
+                                    if (time == morningString) {
                                         morningCarCount.value += 1
                                         morningCarCountRef.setValue(morningCarCount.value)
                                         // Increment the correct time slot based on user selection
@@ -408,12 +392,10 @@ fun CheckInPage(navController: NavController) {
                                                 timeSlotString = "elevenToTwelve"
                                             }
                                         }
-
-                                    } else if (time == "Afternoon"){
+                                    } else if (time == afternoonString) {
                                         afternoonCarCount.value += 1
                                         afternoonCarCountRef.setValue(afternoonCarCount.value)
 
-                                        // Increment the correct time slot based on user selection
                                         when (timeSlot) {
                                             "12:00-13:00" -> {
                                                 timeSlots6.value += 1
@@ -462,10 +444,8 @@ fun CheckInPage(navController: NavController) {
                                             Log.e("Firestore", "Error storing check-in data", e)
                                         }
 
-                                    // Show success dialog
                                     showSuccessDialog = true
 
-                                    // Dismiss the dialog and navigate back after a delay
                                     val handler = Handler(Looper.getMainLooper())
                                     handler.postDelayed({
                                         showSuccessDialog = false
@@ -474,9 +454,8 @@ fun CheckInPage(navController: NavController) {
                                                 inclusive = true
                                             }
                                         }
-                                    }, 2000) // Delay for 2 seconds
+                                    }, 2000)
                                 } else {
-                                    // User has already checked in today
                                     showAlreadyCheckedInDialog = true
                                 }
                             }
@@ -490,14 +469,11 @@ fun CheckInPage(navController: NavController) {
                         border = BorderStroke(2.dp, AppColors.DarkGray),
                         enabled = time.isNotBlank() && timeSlot.isNotBlank()
                     ) {
-                        Text("Submit")
+                        Text(stringResource(R.string.submit))
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Log.d("Check- In Status", "$checkInTime")
-
-                    //shows the users check in status
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -508,19 +484,19 @@ fun CheckInPage(navController: NavController) {
                         if (!checkInAllowed) {
                             Icon(
                                 imageVector = Icons.Default.CheckCircle,
-                                contentDescription = "Checked In",
+                                contentDescription = stringResource(R.string.checked_in),
                                 tint = Color.Green,
                                 modifier = Modifier.size(64.dp)
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = "Check-In Status",
+                                text = stringResource(R.string.check_in_status),
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.Black
                             )
                             Text(
-                                text = "You are checked in for tomorrow ${checkInTime.lowercase()}.",
+                                text = stringResource(R.string.checked_in_for_tomorrow, checkInTime.lowercase()),
                                 fontSize = 12.sp,
                                 color = Color.Gray,
                                 modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -528,19 +504,19 @@ fun CheckInPage(navController: NavController) {
                         } else {
                             Icon(
                                 imageVector = Icons.Default.Warning,
-                                contentDescription = "Not Checked In",
+                                contentDescription = stringResource(R.string.not_checked_in),
                                 tint = Color.Red,
                                 modifier = Modifier.size(64.dp)
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = "Check-In Status",
+                                text = stringResource(R.string.check_in_status),
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.Black
                             )
                             Text(
-                                text = "You are not checked in yet.",
+                                text = stringResource(R.string.not_checked_in_yet),
                                 fontSize = 12.sp,
                                 color = Color.Gray,
                                 modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -550,25 +526,23 @@ fun CheckInPage(navController: NavController) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Add Remove check in Button
                     OutlinedButton(
                         onClick = {
                             if (!checkInAllowed) {
                                 removeSuccess = true
-                                removeCheckIn(studentNumber, emailValue, context) // Pass the context here
+                                removeCheckIn(studentNumber, emailValue, context)
                                 navController.navigate("check_in")
                             }
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 16.dp),  // Space between button and dropdown
+                            .padding(bottom = 16.dp),
                         colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.DarkGray),
-                        enabled = !checkInAllowed // Disable the button when checkInAllowed is true
+                        enabled = !checkInAllowed
                     ) {
-                        Text("Remove Check In")
+                        Text(stringResource(R.string.remove_check_in))
                     }
 
-                    //dialog for when user checks in
                     if (showSuccessDialog) {
                         Dialog(onDismissRequest = { showSuccessDialog = false }) {
                             Surface(
@@ -581,7 +555,7 @@ fun CheckInPage(navController: NavController) {
                                     modifier = Modifier.padding(16.dp)
                                 ) {
                                     Text(
-                                        text = "Thank you for checking in to campus parking. See you tomorrow!",
+                                        text = stringResource(R.string.check_in_success_message),
                                         color = AppColors.DarkGray,
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 18.sp
@@ -591,7 +565,6 @@ fun CheckInPage(navController: NavController) {
                         }
                     }
 
-                    // Display the already checked-in dialog if showAlreadyCheckedInDialog is true
                     if (showAlreadyCheckedInDialog) {
                         Dialog(onDismissRequest = { showAlreadyCheckedInDialog = false }) {
                             Surface(
@@ -604,7 +577,7 @@ fun CheckInPage(navController: NavController) {
                                     modifier = Modifier.padding(16.dp)
                                 ) {
                                     Text(
-                                        text = "You have already checked into campus today. Please try again tomorrow!",
+                                        text = stringResource(R.string.already_checked_in_today),
                                         color = AppColors.DarkGray,
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 18.sp
@@ -619,48 +592,37 @@ fun CheckInPage(navController: NavController) {
     }
 }
 
-//function to remove the users check in status
 fun removeCheckIn(studentNumber: String, emailValue: String, context: Context) {
     val db = FirebaseFirestore.getInstance()
     val database = FirebaseDatabase.getInstance()
 
-    // References to Firebase Realtime Database nodes
     val morningCarCountRef: DatabaseReference = database.getReference("projectedMorningCars")
     val afternoonCarCountRef: DatabaseReference = database.getReference("projectedAfternoonCars")
 
-    // Get current date in dd/MM/yyyy format
     val date = getTodayDate()
 
-    // Query to find the matching check-in for the user for today
     db.collection("check_in")
         .whereEqualTo("stdNumber", studentNumber)
         .whereEqualTo("date", date)
         .get()
         .addOnSuccessListener { querySnapshot ->
-            // If the user has a check-in for today, remove it
             if (!querySnapshot.isEmpty) {
                 for (document in querySnapshot.documents) {
-                    // Retrieve the 'time' and 'timeSlot' fields from the Firestore document
                     val time = document.getString("time")
                     val timeSlot = document.getString("timeSlot")
 
-                    // Remove the document from Firestore
                     db.collection("check_in").document(document.id).delete()
                         .addOnSuccessListener {
-                            // Log success
                             Log.d("Check_In", "Check-in removed for user: $studentNumber")
 
-                            // Update car counts in Firebase Realtime Database based on time value
                             when (time) {
                                 "Morning" -> {
-                                    // Decrement projectedMorningCars count in Firebase Realtime Database
                                     morningCarCountRef.get().addOnSuccessListener { snapshot ->
                                         val currentCount = snapshot.getValue(Int::class.java) ?: 0
                                         morningCarCountRef.setValue(currentCount - 1)
                                     }
                                 }
                                 "Afternoon" -> {
-                                    // Decrement projectedAfternoonCars count in Firebase Realtime Database
                                     afternoonCarCountRef.get().addOnSuccessListener { snapshot ->
                                         val currentCount = snapshot.getValue(Int::class.java) ?: 0
                                         afternoonCarCountRef.setValue(currentCount - 1)
@@ -671,20 +633,17 @@ fun removeCheckIn(studentNumber: String, emailValue: String, context: Context) {
                                 }
                             }
 
-                            // Handle time slot decrement
                             if (timeSlot != null) {
                                 val timeSlotRef: DatabaseReference = database.getReference("timeSlots").child(timeSlot)
                                 timeSlotRef.get().addOnSuccessListener { snapshot ->
                                     val currentCount = snapshot.getValue(Int::class.java) ?: 0
-                                    // Decrement the time slot count if greater than 0
                                     if (currentCount > 0) {
                                         timeSlotRef.setValue(currentCount - 1)
                                     }
                                 }
                             }
 
-                            // Show toast message
-                            Toast.makeText(context, "Check-In status removed successfully.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.check_in_removed_successfully), Toast.LENGTH_SHORT).show()
                         }
                         .addOnFailureListener { e ->
                             Log.e("Check_In", "Error removing check-in", e)
@@ -692,8 +651,7 @@ fun removeCheckIn(studentNumber: String, emailValue: String, context: Context) {
                 }
             } else {
                 Log.d("Check_In", "No check-in found for user: $studentNumber")
-                // Show toast message if no check-in found
-                Toast.makeText(context, "No check-in record found to remove.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.no_check_in_record_found), Toast.LENGTH_SHORT).show()
             }
         }
         .addOnFailureListener { e ->
@@ -701,72 +659,7 @@ fun removeCheckIn(studentNumber: String, emailValue: String, context: Context) {
         }
 }
 
-// Helper function to get the current date in DD/MM/YYYY format
 fun getTodayDate(): String {
     val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     return sdf.format(Date())
 }
-
-// Success Dialog
-@Composable
-fun SuccessDialog() {
-    Dialog(onDismissRequest = {}) {
-        Card(
-            shape = RoundedCornerShape(16.dp),
-            elevation = CardDefaults.cardElevation(8.dp)
-        ) {
-            Column(modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Check-In Successful!",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Green
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { /* Dismiss the dialog */ }) {
-                    Text("OK")
-                }
-            }
-        }
-    }
-}
-
-// Already Checked-In Dialog
-@Composable
-fun AlreadyCheckedInDialog() {
-    Dialog(onDismissRequest = {}) {
-        Card(
-            shape = RoundedCornerShape(16.dp),
-            elevation = CardDefaults.cardElevation(8.dp)
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "You have already checked in today.",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Red
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { }) {
-                    Text("OK")
-                }
-            }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CheckInPagePreview() {
-    val navController = rememberNavController()
-    MaterialTheme {
-        CheckInPage(navController)
-    }
-}
-
-//hahahahahahahah

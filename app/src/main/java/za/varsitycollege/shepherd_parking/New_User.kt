@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,6 +34,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
+import za.varsitycollege.shepherd_parking.AppColors
+import za.varsitycollege.shepherd_parking.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,8 +54,8 @@ fun NewUserPage(navController: NavController) {
     var passwordError by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
-    val auth = remember { FirebaseAuth.getInstance() } // Initialize FirebaseAuth
-    val userManager = remember { UserManager(context) } // Initialize UserManager
+    val auth = remember { FirebaseAuth.getInstance() }
+    val userManager = remember { UserManager(context) }
 
     LaunchedEffect(showPopup) {
         if (showPopup) {
@@ -104,20 +107,20 @@ fun NewUserPage(navController: NavController) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = "SHEPHERD PARKING",
+                                text = stringResource(R.string.app_name),
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = AppColors.DarkGray
                             )
                             Text(
-                                text = "Sign Up",
+                                text = stringResource(R.string.sign_up),
                                 fontSize = 18.sp,
                                 color = AppColors.DarkGray
                             )
                         }
                         Image(
                             painter = painterResource(id = R.drawable.sheep),
-                            contentDescription = "Sheep Logo",
+                            contentDescription = stringResource(R.string.varsity_college_logo),
                             modifier = Modifier
                                 .size(60.dp)
                                 .clip(CircleShape)
@@ -142,9 +145,9 @@ fun NewUserPage(navController: NavController) {
                     OutlinedTextField(
                         value = name,
                         onValueChange = { name = it; nameError = false },
-                        label = { Text("Name") },
+                        label = { Text(stringResource(R.string.name)) },
                         isError = nameError,
-                        supportingText = { if (nameError) Text("This field is required") },
+                        supportingText = { if (nameError) Text(stringResource(R.string.this_field_is_required)) },
                         modifier = Modifier.fillMaxWidth(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = AppColors.MintGreen,
@@ -158,9 +161,9 @@ fun NewUserPage(navController: NavController) {
                     OutlinedTextField(
                         value = surname,
                         onValueChange = { surname = it; surnameError = false },
-                        label = { Text("Surname") },
+                        label = { Text(stringResource(R.string.surname)) },
                         isError = surnameError,
-                        supportingText = { if (surnameError) Text("This field is required") },
+                        supportingText = { if (surnameError) Text(stringResource(R.string.this_field_is_required)) },
                         modifier = Modifier.fillMaxWidth(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = AppColors.MintGreen,
@@ -174,9 +177,9 @@ fun NewUserPage(navController: NavController) {
                     OutlinedTextField(
                         value = studentNumber,
                         onValueChange = { studentNumber = it; studentNumberError = false },
-                        label = { Text("Student Number") },
+                        label = { Text(stringResource(R.string.student_number)) },
                         isError = studentNumberError,
-                        supportingText = { if (studentNumberError) Text("This field is required") },
+                        supportingText = { if (studentNumberError) Text(stringResource(R.string.this_field_is_required)) },
                         modifier = Modifier.fillMaxWidth(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = AppColors.MintGreen,
@@ -190,9 +193,9 @@ fun NewUserPage(navController: NavController) {
                     OutlinedTextField(
                         value = email,
                         onValueChange = { email = it; emailError = false },
-                        label = { Text("Email") },
+                        label = { Text(stringResource(R.string.email)) },
                         isError = emailError,
-                        supportingText = { if (emailError) Text("This field is required") },
+                        supportingText = { if (emailError) Text(stringResource(R.string.this_field_is_required)) },
                         modifier = Modifier.fillMaxWidth(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = AppColors.MintGreen,
@@ -206,9 +209,9 @@ fun NewUserPage(navController: NavController) {
                     OutlinedTextField(
                         value = password,
                         onValueChange = { password = it; passwordError = false },
-                        label = { Text("Password") },
+                        label = { Text(stringResource(R.string.password)) },
                         isError = passwordError,
-                        supportingText = { if (passwordError) Text("This field is required") },
+                        supportingText = { if (passwordError) Text(stringResource(R.string.this_field_is_required)) },
                         modifier = Modifier.fillMaxWidth(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = AppColors.MintGreen,
@@ -227,7 +230,6 @@ fun NewUserPage(navController: NavController) {
                                 auth.createUserWithEmailAndPassword(email, password)
                                     .addOnCompleteListener { task ->
                                         if (task.isSuccessful) {
-                                            // Save additional user info to Firestore
                                             val firebaseUser = auth.currentUser
                                             firebaseUser?.let {
                                                 userManager.saveUser(
@@ -257,7 +259,7 @@ fun NewUserPage(navController: NavController) {
                         colors = ButtonDefaults.buttonColors(containerColor = AppColors.MintGreen)
                     ) {
                         Text(
-                            text = "Sign Up",
+                            text = stringResource(R.string.sign_up),
                             color = Color.Black,
                             fontWeight = FontWeight.Bold
                         )
@@ -270,12 +272,12 @@ fun NewUserPage(navController: NavController) {
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = "Already have an account?",
+                            text = stringResource(R.string.already_have_account),
                             color = Color.Black,
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = "Login",
+                            text = stringResource(R.string.login),
                             color = Color.Blue,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.clickable {
@@ -290,7 +292,7 @@ fun NewUserPage(navController: NavController) {
         // Varsity College logo
         Image(
             painter = painterResource(id = R.drawable.varsity_college_icon),
-            contentDescription = "Varsity College Logo",
+            contentDescription = stringResource(R.string.varsity_college_logo),
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 16.dp)
@@ -318,7 +320,7 @@ fun NewUserPage(navController: NavController) {
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Text(
-                        text = "Thanks for signing up!",
+                        text = stringResource(R.string.thanks_for_signing_up),
                         color = Color.Black,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(16.dp)

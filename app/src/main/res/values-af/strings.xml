@@ -1,32 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Shepherd Parkering</string>
+    <!-- Existing strings -->
+    <string name="app_name">Shepherd Parking</string>
     <string name="sheep_logo_description">Skaap Logo</string>
-    <string name="parking_status">Parkeringstatus:</string>
+    <string name="parking_status">Parkeerstatus:</string>
     <string name="parking_full_percentage">%d%% VOL</string>
-    <string name="sign_up">Registreer</string>
+    <string name="sign_up">Teken aan</string>
     <string name="or">OF</string>
-    <string name="login">Teken In</string>
+    <string name="login">Meld Aan</string>
     <string name="continue_with_google">Gaan voort met Google</string>
-    <string name="google_logo_description">Google-logo</string>
+    <string name="google_logo_description">Google logo</string>
     <string name="varsity_college_logo_description">Varsity College Logo</string>
     <string name="account_exists_title">Rekening Bestaan</string>
-    <string name="account_exists_message">Jy het reeds \'n rekening by ons. Wil jy inteken?</string>
-    <string name="sign_in">Teken In</string>
+    <string name="account_exists_message">Jy het reeds \'n rekening by ons. Wil jy aanmeld?</string>
+    <string name="sign_in">Meld Aan</string>
     <string name="cancel">Kanselleer</string>
 
+    <!-- Settings -->
     <string name="settings">Instellings:</string>
-    <string name="student_information">Studentinligting</string>
+    <string name="student_information">Student Inligting</string>
     <string name="student_number">Studentnommer</string>
-    <string name="update_student_number">Werk Studentnommer by</string>
+    <string name="update_student_number">Werk Studentnommer op</string>
     <string name="fingerprint">Vingerafdruk</string>
     <string name="facial_recognition">Gesigherkenning</string>
-    <string name="location_services">Liggingsdienste</string>
-    <string name="push_notifications">Stootboodskappe</string>
-    <string name="view_app_permissions">Bekyk Apptoelatings</string>
+    <string name="location_services">Liggingdienste</string>
+    <string name="push_notifications">Stootkennisgewings</string>
+    <string name="view_app_permissions">Sien Toestemmings</string>
     <string name="select_language">Kies Taal</string>
-    <string name="expand_language_selection">Brei Taalkeuse uit</string>
+    <string name="expand_language_selection">Brei Taal Keuse uit</string>
     <string name="failed_to_load_student_number">Kon nie studentnommer laai nie</string>
-    <string name="student_number_updated_successfully">Studentnommer suksesvol bygewerk!</string>
-    <string name="student_number_cannot_be_empty">Studentnommer kan nie leeg wees nie</string>
+    <string name="student_number_updated_successfully">Studentnommer suksesvol opgedateer!</string>
+    <string name="student_number_cannot_be_empty">Studentnommer mag nie leeg wees nie</string>
+
+    <!-- Login Page Strings -->
+    <string name="email">E-pos</string>
+    <string name="password">Wagwoord</string>
+    <string name="invalid_email_or_password">Ongeldige e-pos of wagwoord</string>
+    <string name="forgot_password">Wagwoord vergeet?</string>
+    <string name="dont_have_account">Het jy nie \'n rekening nie?</string>
+    <string name="shepherd_parking_header">SHEPHERD PARKERING</string>
+    <string name="home">Tuis</string>
+
+    <!-- Map Updates Strings -->
+    <string name="map_updates_header">Kaartopdaterings (Laaste 24 Ure)</string>
+    <string name="loading">Laai...</string>
+    <string name="no_feedback_data">Geen terugvoerdata beskikbaar vir die afgelope 24 uur nie</string>
+    <string name="error_loading_feedback">Fout met die laai van terugvoer: %1$s</string>
+    <string name="legend">Legende</string>
+    <string name="accident">Ongeluk</string>
+    <string name="heavy_traffic">Swaar Verkeer</string>
+    <string name="road_construction">Padkonstruksie</string>
+    <string name="other">Ander</string>
+    <string name="feedback_from">Terugvoer van %1$s</string>
+    <string name="menu">Kieslys</string>
+
+    <!-- New User Page -->
+    <string name="name">Naam</string>
+    <string name="surname">Van</string>
+    <string name="this_field_is_required">Hierdie veld is vereis</string>
+    <string name="thanks_for_signing_up">Dankie dat jy ingeteken het!</string>
+    <string name="already_have_account">Het jy reeds \'n rekening?</string>
+    <string name="varsity_college_logo">Varsity College-logo</string>
+
+    <!-- Guard House-->
+    <string name="language_updated">Taal verander na %1$s</string>
+    <string name="guard_house">Wag Huis</string>
+    <string name="logout">Teken Uit</string>
+    <string name="reset_car_count">Herstel Motor Telling</string>
+    <string name="confirm_reset">Bevestig Herstel</string>
+    <string name="reset_message">Is jy seker jy wil die motor telling herstel?</string>
+    <string name="yes">Ja</string>
+    <string name="cars_on_campus">Motors op Kampus: %1$d</string>
+    <string name="add_car">Voeg Motor By:</string>
+    <string name="minus_car">Verwyder Motor:</string>
+
+    <!-- Analytics-->
+    <string name="analytics">Analise</string>
+    <string name="projected_morning_capacity">Voorspelde Kapasiteit vir Môre Oggend</string>
+    <string name="projected_afternoon_capacity">Voorspelde Kapasiteit vir Môre Middag</string>
+    <string name="full">% VOL</string>
+    <string name="projected_capacity_chart">Voorspelde kapasiteit vir môre</string>
+    <string name="time_slots">Tydgleuwe</string>
+
+    <!--Check In-->
+    <string name="morning">Oggend</string>
+    <string name="afternoon">Middag</string>
+    <string name="select_time_morning_afternoon">Kies Tyd (Oggend/Middag)</string>
+    <string name="select_specific_time_slot">Kies Spesifieke Tydsgleuf</string>
+    <string name="checked_in">Ingeteken</string>
+    <string name="check_in_status">Inteken Status</string>
+    <string name="checked_in_for_tomorrow">Jy is ingeteken vir môre %s.</string>
+    <string name="not_checked_in">Nie Ingeteken Nie</string>
+    <string name="not_checked_in_yet">Jy is nog nie ingeteken nie.</string>
+    <string name="remove_check_in">Verwyder Intekening</string>
+    <string name="check_in_success_message">Dankie dat jy ingeteken het vir kampusparkering. Sien jou môre!</string>
+    <string name="check_in_removed_successfully">Intekenstatus suksesvol verwyder.</string>
+    <string name="no_check_in_record_found">Geen inteken-rekord gevind om te verwyder nie.</string>
+    <string name="already_checked_in_today">Jy het reeds vandag ingeteken.</string>
+
+    <!--Home Page-->
+    <string name="home_page">Tuisblad</string>
+    <string name="parking_availability">Parkering Beskikbaarheid : %d%% VOL</string>
+    <string name="check_in">Aanmeld</string>
+    <string name="check_in_explanation">Teken jou aankoms by die parkeerarea aan</string>
+    <string name="traffic_feedback">Verkeersterugvoer</string>
+    <string name="traffic_feedback_explanation">Rapporteer huidige verkeertoestande</string>
+    <string name="late_notification">Laat Kennisgewing</string>
+    <string name="late">Laat</string>
+    <string name="late_explanation">Stel in kennis as jy laat gaan wees</string>
+    <string name="analytics_explanation">Bekyk parkeergebruikstatistieke</string>
+    <string name="enter_student_number">Voer Studentnommer in</string>
+    <string name="enter_student_number_explanation">Voer asseblief jou studentnommer in om jou registrasie te voltooi.</string>
+    <string name="save">Stoor</string>
+    <string name="failed_to_read_car_count">Kon nie motortelling lees nie</string>
+    <string name="failed_to_read_max_car_count">Kon nie maksimum motortelling lees nie</string>
+    <string name="failed_to_load_initial_data">Kon nie aanvanklike data laai nie</string>
+    <string name="failed_to_check_date">Kon nie datum nagaan nie</string>
+
+    <!--Late Page-->
+    <string name="select_lecturer">Kies Dosent</string>
+    <string name="select_reason">Kies Rede</string>
+    <string name="failed_to_fetch_student_number">Kon nie studentnommer haal nie</string>
+    <string name="reason_traffic">Verkeer</string>
+    <string name="reason_accident">Ongeluk</string>
+    <string name="reason_other">Ander</string>
+    <string name="robot_icon_description">Robot Ikoon</string>
+    <string name="add_lecturer">Voeg Dosent by</string>
+    <string name="lecturer">Dosent</string>
+    <string name="reason">Rede</string>
+    <string name="extra_information">Ekstra Inligting</string>
+    <string name="clear">Maak Skoon</string>
+    <string name="submit">Dien In</string>
+    <string name="late_submission_subject">Laat Indiening</string>
+    <string name="late_submission_email_body">Studentnommer: %1$s\nDosent: %2$s\nRede: %3$s\nEkstra Inligting: %4$s</string>
+    <string name="choose_email_app">Kies \'n e-pos-toepassing</string>
+    <string name="no_email_app_found">Geen e-pos-toepassing gevind nie. Installeer asseblief \'n e-pos-toepassing om hierdie boodskap te stuur.</string>
+    <string name="failed_to_submit_late_notification">Kon nie laat kennisgewing indien nie</string>
+    <string name="success">Sukses!</string>
+    <string name="late_submission_recorded">Jou laat indiening is aangeteken.</string>
+    <string name="ok">OK</string>
+
+    <!--Main Activity-->
+    <string name="subscribed_to_parking_topic">Ingeteken op parkering onderwerp</string>
+    <string name="subscription_failed">Inskrywing het misluk</string>
+    <string name="app_icon_description">Toepassing Ikoon</string>
+    <string name="map_updates">Kaartopdaterings</string>
+    <string name="api_test">API Toets</string>
+
+    <!--Lecturer Details-->
+    <string name="add_lecturer_details">Voeg Dosent Besonderhede by</string>
+    <string name="lecturer_name">Dosent Naam</string>
+    <string name="lecturer_email">Dosent E-pos</string>
+    <string name="lecturer_icon_description">Dosent Ikoon</string>
+    <string name="lecturer_added_successfully">Dosent suksesvol bygevoeg!</string>
+    <string name="failed_to_add_lecturer">Kon nie dosent byvoeg nie. Probeer asseblief weer.</string>
+    <string name="add">Voeg by</string>
+
+    <!-- Traffic Feedback Page Strings -->
+    <string name="message">Boodskap</string>
+    <string name="category">Kategorie</string>
+    <string name="view_map_updates">Sien Kaartopdaterings</string>
+    <string name="recent_updates">Onlangse Opdaterings</string>
+    <string name="failed_to_submit_feedback">Kon nie terugvoer indien nie: %1$s</string>
+    <string name="please_enter_message">Voer asseblief \'n boodskap in voordat u indien.</string>
+
 </resources>
