@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -90,7 +91,6 @@ fun SignUpPage(navController: NavController) {
     }
     val googleSignInClient = remember { GoogleSignIn.getClient(context, gso) }
 
-    //UPDATED THIS
     fun signInWithGoogle(account: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         auth.signInWithCredential(credential)
@@ -186,7 +186,7 @@ fun SignUpPage(navController: NavController) {
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.sheep),
-                    contentDescription = "Sheep Logo",
+                    contentDescription = stringResource(R.string.sheep_logo_description),
                     modifier = Modifier.fillMaxSize()
                 )
             }
@@ -207,7 +207,7 @@ fun SignUpPage(navController: NavController) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Parking Status:",
+                        text = stringResource(R.string.parking_status),
                         fontWeight = FontWeight.Bold,
                         color = AppColors.DarkGray
                     )
@@ -220,7 +220,7 @@ fun SignUpPage(navController: NavController) {
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     Text(
-                        text = "${(progress * 100).toInt()}% FULL",
+                        text = stringResource(R.string.parking_full_percentage, (progress * 100).toInt()),
                         fontWeight = FontWeight.Bold,
                         color = AppColors.DarkGray
                     )
@@ -245,7 +245,7 @@ fun SignUpPage(navController: NavController) {
                         colors = ButtonDefaults.buttonColors(containerColor = AppColors.MintGreen)
                     ) {
                         Text(
-                            text = "Sign Up",
+                            text = stringResource(R.string.sign_up),
                             fontWeight = FontWeight.Bold,
                             color = AppColors.DarkGray
                         )
@@ -254,7 +254,7 @@ fun SignUpPage(navController: NavController) {
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
-                        text = "OR",
+                        text = stringResource(R.string.or),
                         fontWeight = FontWeight.Bold,
                         color = AppColors.DarkGray
                     )
@@ -268,7 +268,7 @@ fun SignUpPage(navController: NavController) {
                         colors = ButtonDefaults.buttonColors(containerColor = AppColors.MintGreen)
                     ) {
                         Text(
-                            text = "Login",
+                            text = stringResource(R.string.login),
                             fontWeight = FontWeight.Bold,
                             color = AppColors.DarkGray
                         )
@@ -292,12 +292,12 @@ fun SignUpPage(navController: NavController) {
                         ) {
                             Image(
                                 painter = painterResource(id = R.drawable.google_logo),
-                                contentDescription = "Google logo",
+                                contentDescription = stringResource(R.string.google_logo_description),
                                 modifier = Modifier.size(24.dp)
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                text = "Continue with Google",
+                                text = stringResource(R.string.continue_with_google),
                                 color = Color.Black,
                                 fontWeight = FontWeight.Medium
                             )
@@ -309,7 +309,7 @@ fun SignUpPage(navController: NavController) {
 
         Image(
             painter = painterResource(id = R.drawable.varsity_college_icon),
-            contentDescription = "Varsity College Logo",
+            contentDescription = stringResource(R.string.varsity_college_logo_description),
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 16.dp)
@@ -330,19 +330,19 @@ fun ShowEmailExistsDialog(
     AlertDialog(
         onDismissRequest = onCancel,
         title = {
-            Text(text = "Account Exists")
+            Text(text = stringResource(R.string.account_exists_title))
         },
         text = {
-            Text("You already have an account with us. Would you like to sign in?")
+            Text(stringResource(R.string.account_exists_message))
         },
         confirmButton = {
             Button(onClick = onSignInConfirmed) {
-                Text("Sign In")
+                Text(stringResource(R.string.sign_in))
             }
         },
         dismissButton = {
             Button(onClick = onCancel) {
-                Text("Cancel")
+                Text(stringResource(R.string.cancel))
             }
         }
     )

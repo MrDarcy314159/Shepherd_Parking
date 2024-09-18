@@ -1,4 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Shepherd_Parking</string>
-    <string name="select_language">Select Language</string>
+    <string name="app_name">Shepherd Parking</string>
+    <string name="sheep_logo_description">Uphawu Lwemvu</string>
+    <string name="parking_status">Isimo Sokupaka:</string>
+    <string name="parking_full_percentage">%d%% KUGCWELE</string>
+    <string name="sign_up">Bhalisela</string>
+    <string name="or">NOMA</string>
+    <string name="login">Ngena</string>
+    <string name="continue_with_google">Qhubeka nge-Google</string>
+    <string name="google_logo_description">Uphawu lwe-Google</string>
+    <string name="varsity_college_logo_description">Uphawu lwe-Varsity College</string>
+    <string name="account_exists_title">I-akhawunti Ikhona</string>
+    <string name="account_exists_message">Usuvele unayo i-akhawunti kithi. Ungathanda ukungena?</string>
+    <string name="sign_in">Ngena</string>
+    <string name="cancel">Khansela</string>
+
+    <string name="settings">Izilungiselelo:</string>
+    <string name="student_information">Imininingwane Yomfundi</string>
+    <string name="student_number">Inombolo Yomfundi</string>
+    <string name="update_student_number">Buyekeza Inombolo Yomfundi</string>
+    <string name="fingerprint">Izigxivizo Zeminwe</string>
+    <string name="facial_recognition">Ukuhlonzwa Kobuso</string>
+    <string name="location_services">Amasevisi Endawo</string>
+    <string name="push_notifications">Izaziso Zokushova</string>
+    <string name="view_app_permissions">Buka Izimvume Zohlelo</string>
+    <string name="select_language">Khetha Ulimi</string>
+    <string name="expand_language_selection">Nweba Ukukhethwa Kolimi</string>
+    <string name="failed_to_load_student_number">Ihlulekile ukulayisha inombolo yomfundi</string>
+    <string name="student_number_updated_successfully">Inombolo yomfundi ibuyekezwe ngempumelelo!</string>
+    <string name="student_number_cannot_be_empty">Inombolo yomfundi ayikwazi ukuba yize</string>
 </resources>

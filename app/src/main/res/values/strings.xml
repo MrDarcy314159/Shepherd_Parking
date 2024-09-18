@@ -1,4 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Shepherd_Parking</string>
+    <string name="app_name">Shepherd Parking</string>
+    <string name="sheep_logo_description">Sheep Logo</string>
+    <string name="parking_status">Parking Status:</string>
+    <string name="parking_full_percentage">%d%% FULL</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="or">OR</string>
+    <string name="login">Login</string>
+    <string name="continue_with_google">Continue with Google</string>
+    <string name="google_logo_description">Google logo</string>
+    <string name="varsity_college_logo_description">Varsity College Logo</string>
+    <string name="account_exists_title">Account Exists</string>
+    <string name="account_exists_message">You already have an account with us. Would you like to sign in?</string>
+    <string name="sign_in">Sign In</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="settings">Settings:</string>
+    <string name="student_information">Student Information</string>
+    <string name="student_number">Student Number</string>
+    <string name="update_student_number">Update Student Number</string>
+    <string name="fingerprint">Fingerprint</string>
+    <string name="facial_recognition">Facial Recognition</string>
+    <string name="location_services">Location Services</string>
+    <string name="push_notifications">Push Notifications</string>
+    <string name="view_app_permissions">View App Permissions</string>
     <string name="select_language">Select Language</string>
+    <string name="expand_language_selection">Expand Language Selection</string>
+    <string name="failed_to_load_student_number">Failed to load student number</string>
+    <string name="student_number_updated_successfully">Student number updated successfully!</string>
+    <string name="student_number_cannot_be_empty">Student number cannot be empty</string>
 </resources>
+

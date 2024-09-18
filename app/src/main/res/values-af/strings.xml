@@ -1,4 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Shepherd_Parking</string>
-    <string name="select_language">Select Language</string>
+    <string name="app_name">Shepherd Parkering</string>
+    <string name="sheep_logo_description">Skaap Logo</string>
+    <string name="parking_status">Parkeringstatus:</string>
+    <string name="parking_full_percentage">%d%% VOL</string>
+    <string name="sign_up">Registreer</string>
+    <string name="or">OF</string>
+    <string name="login">Teken In</string>
+    <string name="continue_with_google">Gaan voort met Google</string>
+    <string name="google_logo_description">Google-logo</string>
+    <string name="varsity_college_logo_description">Varsity College Logo</string>
+    <string name="account_exists_title">Rekening Bestaan</string>
+    <string name="account_exists_message">Jy het reeds \'n rekening by ons. Wil jy inteken?</string>
+    <string name="sign_in">Teken In</string>
+    <string name="cancel">Kanselleer</string>
+
+    <string name="settings">Instellings:</string>
+    <string name="student_information">Studentinligting</string>
+    <string name="student_number">Studentnommer</string>
+    <string name="update_student_number">Werk Studentnommer by</string>
+    <string name="fingerprint">Vingerafdruk</string>
+    <string name="facial_recognition">Gesigherkenning</string>
+    <string name="location_services">Liggingsdienste</string>
+    <string name="push_notifications">Stootboodskappe</string>
+    <string name="view_app_permissions">Bekyk Apptoelatings</string>
+    <string name="select_language">Kies Taal</string>
+    <string name="expand_language_selection">Brei Taalkeuse uit</string>
+    <string name="failed_to_load_student_number">Kon nie studentnommer laai nie</string>
+    <string name="student_number_updated_successfully">Studentnommer suksesvol bygewerk!</string>
+    <string name="student_number_cannot_be_empty">Studentnommer kan nie leeg wees nie</string>
 </resources>
