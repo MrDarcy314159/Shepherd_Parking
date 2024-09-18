@@ -18,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
+//comment
 @Composable
 fun SplashPage(navController: NavController) {
     LaunchedEffect(Unit) {
