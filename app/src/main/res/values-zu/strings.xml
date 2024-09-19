@@ -101,6 +101,7 @@
     <string name="check_in_removed_successfully">Isimo sokungena sisusiwe ngempumelelo.</string>
     <string name="no_check_in_record_found">Akukho rekhodi lokungena elitholakele ukuba lisuswe.</string>
     <string name="already_checked_in_today">Usuvele ungenile namhlanje.</string>
+    <string name="check_in_successful">Ukungena kuphumelele!</string>
 
     <!--Home Page-->
     <string name="home_page">Ikhasi Lasekhaya</string>

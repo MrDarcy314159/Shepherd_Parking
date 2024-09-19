@@ -100,6 +100,7 @@
     <string name="check_in_success_message">Thank you for checking in to campus parking. See you tomorrow!</string>
     <string name="check_in_removed_successfully">Check-In status removed successfully.</string>
     <string name="no_check_in_record_found">No check-in record found to remove.</string>
+    <string name="check_in_successful">Check-in successful!</string>
     <string name="already_checked_in_today">You have already checked in today.</string>
 
     <!--Home Page-->

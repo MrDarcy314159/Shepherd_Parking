@@ -31,6 +31,7 @@ import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.getValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
@@ -72,6 +73,7 @@ fun CheckInPage(navController: NavController) {
     val afternoonTimeSlots = listOf("12:00-13:00", "13:00-14:00", "14:00-15:00", "15:00-16:00", "16:00-17:00")
 
     var timeSlot by remember { mutableStateOf("") }
+    var selectedTimeSlotIndex by remember { mutableStateOf(0) }
     var showTimeSlotDropdown by remember { mutableStateOf(false) }
 
     val userManager = remember { UserManager(context) }
@@ -129,30 +131,23 @@ fun CheckInPage(navController: NavController) {
     val morningCarCountRef: DatabaseReference = database.getReference("projectedMorningCars")
     val afternoonCarCountRef: DatabaseReference = database.getReference("projectedAfternoonCars")
 
-    val timeSlotsRef1: DatabaseReference = database.getReference("timeSlots/sevenToEight")
-    val timeSlotsRef2: DatabaseReference = database.getReference("timeSlots/eightToNine")
-    val timeSlotsRef3: DatabaseReference = database.getReference("timeSlots/nineToTen")
-    val timeSlotsRef4: DatabaseReference = database.getReference("timeSlots/tenToEleven")
-    val timeSlotsRef5: DatabaseReference = database.getReference("timeSlots/elevenToTwelve")
-    val timeSlotsRef6: DatabaseReference = database.getReference("timeSlots/twelveToOne")
-    val timeSlotsRef7: DatabaseReference = database.getReference("timeSlots/oneToTwo")
-    val timeSlotsRef8: DatabaseReference = database.getReference("timeSlots/twoToThree")
-    val timeSlotsRef9: DatabaseReference = database.getReference("timeSlots/threeToFour")
-    val timeSlotsRef10: DatabaseReference = database.getReference("timeSlots/fourToFive")
-
     val morningCarCount = remember { mutableStateOf(0) }
     val afternoonCarCount = remember { mutableStateOf(0) }
 
-    val timeSlots1 = remember { mutableStateOf(0) }
-    val timeSlots2 = remember { mutableStateOf(0) }
-    val timeSlots3 = remember { mutableStateOf(0) }
-    val timeSlots4 = remember { mutableStateOf(0) }
-    val timeSlots5 = remember { mutableStateOf(0) }
-    val timeSlots6 = remember { mutableStateOf(0) }
-    val timeSlots7 = remember { mutableStateOf(0) }
-    val timeSlots8 = remember { mutableStateOf(0) }
-    val timeSlots9 = remember { mutableStateOf(0) }
-    val timeSlots10 = remember { mutableStateOf(0) }
+    val timeSlots = remember { List(10) {mutableStateOf(0) } }
+
+    val timeSlotRef = listOf(
+        "timeSlots/sevenToEight",
+        "timeSlots/eightToNine",
+        "timeSlots/nineToTen",
+        "timeSlots/tenToEleven",
+        "timeSlots/elevenToTwelve",
+        "timeSlots/twelveToOne",
+        "timeSlots/oneToTwo",
+        "timeSlots/twoToThree",
+        "timeSlots/threeToFour",
+        "timeSlots/fourToFive"
+    )
 
     LaunchedEffect(Unit) {
         val morningSnapshot = morningCarCountRef.get().await()
@@ -160,35 +155,11 @@ fun CheckInPage(navController: NavController) {
         val afternoonSnapshot = afternoonCarCountRef.get().await()
         afternoonCarCount.value = afternoonSnapshot.getValue(Int::class.java) ?: 0
 
-        val timeSlot1Snapshot = timeSlotsRef1.get().await()
-        timeSlots1.value = timeSlot1Snapshot.getValue(Int::class.java) ?: 0
-
-        val timeSlot2Snapshot = timeSlotsRef2.get().await()
-        timeSlots2.value = timeSlot2Snapshot.getValue(Int::class.java) ?: 0
-
-        val timeSlot3Snapshot = timeSlotsRef3.get().await()
-        timeSlots3.value = timeSlot3Snapshot.getValue(Int::class.java) ?: 0
-
-        val timeSlot4Snapshot = timeSlotsRef4.get().await()
-        timeSlots4.value = timeSlot4Snapshot.getValue(Int::class.java) ?: 0
-
-        val timeSlot5Snapshot = timeSlotsRef5.get().await()
-        timeSlots5.value = timeSlot5Snapshot.getValue(Int::class.java) ?: 0
-
-        val timeSlot6Snapshot = timeSlotsRef6.get().await()
-        timeSlots6.value = timeSlot6Snapshot.getValue(Int::class.java) ?: 0
-
-        val timeSlot7Snapshot = timeSlotsRef7.get().await()
-        timeSlots7.value = timeSlot7Snapshot.getValue(Int::class.java) ?: 0
-
-        val timeSlot8Snapshot = timeSlotsRef8.get().await()
-        timeSlots8.value = timeSlot8Snapshot.getValue(Int::class.java) ?: 0
-
-        val timeSlot9Snapshot = timeSlotsRef9.get().await()
-        timeSlots9.value = timeSlot9Snapshot.getValue(Int::class.java) ?: 0
-
-        val timeSlot10Snapshot = timeSlotsRef10.get().await()
-        timeSlots10.value = timeSlot10Snapshot.getValue(Int::class.java) ?: 0
+        for ((index, timeslot) in timeSlotRef.withIndex())
+        {
+            val timeSlotSnapshot = database.getReference(timeslot).get().await()
+            timeSlots[index].value = timeSlotSnapshot.getValue(Int::class.java) ?: 0
+        }
     }
 
     Box(
@@ -338,12 +309,13 @@ fun CheckInPage(navController: NavController) {
                                 onDismissRequest = { showTimeSlotDropdown = false },
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                val timeSlots = if (time == morningString) morningTimeSlots else afternoonTimeSlots
-                                timeSlots.forEach { slot ->
+                                val timeSlotDropdown = if (time == morningString) morningTimeSlots else afternoonTimeSlots
+                                timeSlotDropdown.forEachIndexed { index, slot ->
                                     DropdownMenuItem(
                                         text = { Text(slot) },
                                         onClick = {
                                             timeSlot = slot
+                                            selectedTimeSlotIndex = index
                                             showTimeSlotDropdown = false
                                         }
                                     )
@@ -358,71 +330,22 @@ fun CheckInPage(navController: NavController) {
                         onClick = {
                             if (time.isNotBlank() && timeSlot.isNotBlank()) {
                                 if (checkInAllowed) {
-                                    var timeSlotString = ""
-
                                     // Proceed with check-in logic and storing data in Firestore
                                     if (time == morningString) {
                                         morningCarCount.value += 1
                                         morningCarCountRef.setValue(morningCarCount.value)
-                                        // Increment the correct time slot based on user selection
-                                        when (timeSlot) {
-                                            "7:00-8:00" -> {
-                                                timeSlots1.value += 1
-                                                timeSlotsRef1.setValue(timeSlots1.value)
-                                                timeSlotString = "sevenToEight"
-                                            }
-                                            "8:00-9:00" -> {
-                                                timeSlots2.value += 1
-                                                timeSlotsRef2.setValue(timeSlots2.value)
-                                                timeSlotString = "eightToNine"
-                                            }
-                                            "9:00-10:00" -> {
-                                                timeSlots3.value += 1
-                                                timeSlotsRef3.setValue(timeSlots3.value)
-                                                timeSlotString = "nineToTen"
-                                            }
-                                            "10:00-11:00" -> {
-                                                timeSlots4.value += 1
-                                                timeSlotsRef4.setValue(timeSlots4.value)
-                                                timeSlotString = "tenToEleven"
-                                            }
-                                            "11:00-12:00" -> {
-                                                timeSlots5.value += 1
-                                                timeSlotsRef5.setValue(timeSlots5.value)
-                                                timeSlotString = "elevenToTwelve"
-                                            }
-                                        }
+
+                                        timeSlots[selectedTimeSlotIndex].value += 1
+                                        database.getReference(timeSlotRef[selectedTimeSlotIndex]).setValue(timeSlots[selectedTimeSlotIndex].value)
+
                                     } else if (time == afternoonString) {
                                         afternoonCarCount.value += 1
                                         afternoonCarCountRef.setValue(afternoonCarCount.value)
 
-                                        when (timeSlot) {
-                                            "12:00-13:00" -> {
-                                                timeSlots6.value += 1
-                                                timeSlotsRef6.setValue(timeSlots6.value)
-                                                timeSlotString = "twelveToOne"
-                                            }
-                                            "13:00-14:00" -> {
-                                                timeSlots7.value += 1
-                                                timeSlotsRef7.setValue(timeSlots7.value)
-                                                timeSlotString = "oneToTwo"
-                                            }
-                                            "14:00-15:00" -> {
-                                                timeSlots8.value += 1
-                                                timeSlotsRef8.setValue(timeSlots8.value)
-                                                timeSlotString = "twoToThree"
-                                            }
-                                            "15:00-16:00" -> {
-                                                timeSlots9.value += 1
-                                                timeSlotsRef9.setValue(timeSlots9.value)
-                                                timeSlotString = "threeToFour"
-                                            }
-                                            "16:00-17:00" -> {
-                                                timeSlots10.value += 1
-                                                timeSlotsRef10.setValue(timeSlots10.value)
-                                                timeSlotString = "fourToFive"
-                                            }
-                                        }
+                                        selectedTimeSlotIndex += 5
+
+                                        timeSlots[selectedTimeSlotIndex].value += 1
+                                        database.getReference(timeSlotRef[selectedTimeSlotIndex]).setValue(timeSlots[selectedTimeSlotIndex].value)
                                     }
 
                                     // Store check-in data in Firestore
@@ -431,8 +354,9 @@ fun CheckInPage(navController: NavController) {
                                         "surname" to surname,
                                         "stdNumber" to studentNumber,
                                         "time" to time,
-                                        "timeSlot" to timeSlotString,
-                                        "date" to getTodayDate()
+                                        "timeSlot" to timeSlot,
+                                        "date" to getTodayDate(),
+                                        "index" to selectedTimeSlotIndex
                                     )
 
                                     db.collection("check_in")
@@ -444,11 +368,12 @@ fun CheckInPage(navController: NavController) {
                                             Log.e("Firestore", "Error storing check-in data", e)
                                         }
 
-                                    showSuccessDialog = true
+                                    // Show success toast instead of dialog
+                                    toastMessage = context.getString(R.string.check_in_successful)
 
+                                    // Automatically navigate after showing the toast
                                     val handler = Handler(Looper.getMainLooper())
                                     handler.postDelayed({
-                                        showSuccessDialog = false
                                         navController.navigate("check_in") {
                                             popUpTo(navController.graph.startDestinationId) {
                                                 inclusive = true
@@ -456,7 +381,8 @@ fun CheckInPage(navController: NavController) {
                                         }
                                     }, 2000)
                                 } else {
-                                    showAlreadyCheckedInDialog = true
+                                    // Show already checked-in toast instead of dialog
+                                    toastMessage = context.getString(R.string.already_checked_in_today)
                                 }
                             }
                         },
@@ -471,6 +397,7 @@ fun CheckInPage(navController: NavController) {
                     ) {
                         Text(stringResource(R.string.submit))
                     }
+
 
                     Spacer(modifier = Modifier.height(16.dp))
 
@@ -530,7 +457,7 @@ fun CheckInPage(navController: NavController) {
                         onClick = {
                             if (!checkInAllowed) {
                                 removeSuccess = true
-                                removeCheckIn(studentNumber, emailValue, context)
+                                removeCheckIn(studentNumber, context)
                                 navController.navigate("check_in")
                             }
                         },
@@ -592,7 +519,7 @@ fun CheckInPage(navController: NavController) {
     }
 }
 
-fun removeCheckIn(studentNumber: String, emailValue: String, context: Context) {
+fun removeCheckIn(studentNumber: String, context: Context) {
     val db = FirebaseFirestore.getInstance()
     val database = FirebaseDatabase.getInstance()
 
@@ -609,7 +536,28 @@ fun removeCheckIn(studentNumber: String, emailValue: String, context: Context) {
             if (!querySnapshot.isEmpty) {
                 for (document in querySnapshot.documents) {
                     val time = document.getString("time")
-                    val timeSlot = document.getString("timeSlot")
+                    val index = document.getLong("index")?.toInt()
+
+                    Log.d("Index-Number", "Index Number : $index")
+
+                    val timeSlotIndex = listOf(
+                        "sevenToEight",
+                        "eightToNine",
+                        "nineToTen",
+                        "tenToEleven",
+                        "elevenToTwelve",
+                        "twelveToOne",
+                        "oneToTwo",
+                        "twoToThree",
+                        "threeToFour",
+                        "fourToFive"
+                    )
+
+                    val timeSlot = if (index != null && index in timeSlotIndex.indices) {
+                        timeSlotIndex[index]
+                    } else {
+                        null
+                    }
 
                     db.collection("check_in").document(document.id).delete()
                         .addOnSuccessListener {

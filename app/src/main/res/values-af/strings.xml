@@ -101,6 +101,7 @@
     <string name="check_in_removed_successfully">Intekenstatus suksesvol verwyder.</string>
     <string name="no_check_in_record_found">Geen inteken-rekord gevind om te verwyder nie.</string>
     <string name="already_checked_in_today">Jy het reeds vandag ingeteken.</string>
+    <string name="check_in_successful">Inboek suksesvol!</string>
 
     <!--Home Page-->
     <string name="home_page">Tuisblad</string>
