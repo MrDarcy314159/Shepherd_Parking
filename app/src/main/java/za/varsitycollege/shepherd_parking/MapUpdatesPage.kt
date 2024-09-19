@@ -72,7 +72,7 @@ fun MapUpdatesPage(navController: NavController) {
                 try {
                     val location = doc.getString("location")
                     val message = doc.getString("message") ?: noFeedbackText // Using pre-loaded string
-                    val studentNumber = doc.getString("studentNumber") ?: "Unknown"
+                    val studentNumber = doc.getString("stdNumber") ?: "Unknown"
                     val timestamp = doc.getLong("timestamp") ?: return@mapNotNull null
                     val category = doc.getString("category")?.let { FeedbackCategory.valueOf(it) } ?: FeedbackCategory.Other
 

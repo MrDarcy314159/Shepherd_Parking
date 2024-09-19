@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,11 +30,13 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
+import com.google.firebase.firestore.FirebaseFirestore
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsPage(navController: NavController, userManager: UserManager) {
     var studentNumber by remember { mutableStateOf("ST10000001") } // Default value until fetched
+    var oldStudentNumber by remember { mutableStateOf("") }
     var facialRecognition by remember { mutableStateOf(false) }
     var fingerprintSettings by remember { mutableStateOf(false) }
     var locationServices by remember { mutableStateOf(false) }
@@ -43,6 +46,7 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
     var toastMessage by remember { mutableStateOf<String?>(null) }
 
     val context = LocalContext.current
+    val db = remember { FirebaseFirestore.getInstance() }
 
     val languageManager = remember { LanguageManager(context) }
     var selectedLanguage by remember { mutableStateOf(languageManager.getLanguage()) }
@@ -64,6 +68,7 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
             userManager.getStudentNumber(
                 onSuccess = { fetchedStudentNumber ->
                     studentNumber = fetchedStudentNumber
+                    oldStudentNumber = fetchedStudentNumber // Store old student number to update Firebase records
                 },
                 onFailure = {
                     toastMessage = context.getString(R.string.failed_to_load_student_number)
@@ -71,6 +76,48 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
             )
         }
     }
+
+    // Function to update the student number in Firebase
+    fun updateStudentNumberInFirebase(newStudentNumber: String) {
+        if (newStudentNumber.isNotBlank() && newStudentNumber != oldStudentNumber) {
+            // List of collections to update
+            val collectionsToUpdate = listOf("check_in", "lecturers", "traffic_feedback")
+
+            // Loop through each collection and update the student number
+            for (collection in collectionsToUpdate) {
+                db.collection(collection)
+                    .whereEqualTo("stdNumber", oldStudentNumber)
+                    .get()
+                    .addOnSuccessListener { querySnapshot ->
+                        val batch = db.batch()
+                        for (document in querySnapshot.documents) {
+                            val docRef = db.collection(collection).document(document.id)
+                            batch.update(docRef, "stdNumber", newStudentNumber)
+                        }
+                        // Commit the batch for this collection
+                        batch.commit()
+                            .addOnSuccessListener {
+                                Log.d("UpdateStudentNumber", "$collection updated successfully.")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.e("UpdateStudentNumber", "Failed to update $collection", e)
+                            }
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("UpdateStudentNumber", "Failed to fetch documents from $collection", e)
+                    }
+            }
+
+            // Show success message when done
+            toastMessage = context.getString(R.string.student_number_updated_successfully)
+            oldStudentNumber = newStudentNumber // Update the oldStudentNumber reference
+        } else if (newStudentNumber.isBlank()) {
+            toastMessage = context.getString(R.string.student_number_cannot_be_empty)
+        } else {
+            toastMessage = context.getString(R.string.student_number_same_as_old)
+        }
+    }
+
 
     // Function to open App Info screen
     fun openAppInfo() {
@@ -172,8 +219,8 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                             val email = userManager.getCurrentUserEmail()
                             email?.let {
                                 if (studentNumber.isNotBlank()) {
+                                    updateStudentNumberInFirebase(studentNumber)
                                     userManager.saveStudentNumber(it, studentNumber)
-                                    toastMessage = context.getString(R.string.student_number_updated_successfully)
                                 } else {
                                     toastMessage = context.getString(R.string.student_number_cannot_be_empty)
                                 }
@@ -286,6 +333,7 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
+                    // Language selection dropdown
                     Box {
                         OutlinedTextField(
                             value = languages.find { it.first == selectedLanguage }?.second ?: "English",

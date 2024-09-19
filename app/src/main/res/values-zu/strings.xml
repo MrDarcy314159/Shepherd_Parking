@@ -17,20 +17,23 @@
     <string name="cancel">Khansela</string>
 
     <!-- Settings -->
-    <string name="settings">Izilungiselelo:</string>
-    <string name="student_information">Ulwazi Lomfundi</string>
-    <string name="student_number">Inombolo Yomfundi</string>
-    <string name="update_student_number">Buyekeza Inombolo Yomfundi</string>
-    <string name="fingerprint">Umlandeli weFingikhodi</string>
-    <string name="facial_recognition">Ukubona Ubuso</string>
+    <string name="settings">Izilungiselelo</string>
+    <string name="student_information">Ulwazi Lwe-Student</string>
+    <string name="student_number">Inombolo Ye-Student</string>
+    <string name="update_student_number">Buyekeza Inombolo Ye-Student</string>
+    <string name="student_number_updated_successfully">Inombolo ye-student ibuyekeziwe ngempumelelo</string>
+    <string name="failed_to_update_student_number">Yehlulekile ukubuyekeza inombolo ye-student</string>
+    <string name="failed_to_fetch_check_in_records">Yehlulekile ukuthola amarekhodi wokungena</string>
+    <string name="student_number_cannot_be_empty">Inombolo ye-student ayinakuba ngeke</string>
+    <string name="student_number_same_as_old">Inombolo entsha ye-student iyafana neyandala</string>
+    <string name="fingerprint">I-Fingerprint</string>
+    <string name="facial_recognition">Ukuqonda Ubuso</string>
     <string name="location_services">Izinsiza Zendawo</string>
-    <string name="push_notifications">Izaziso Zokucindezela</string>
-    <string name="view_app_permissions">Buka Imvume Yohlelo Lokusebenza</string>
+    <string name="push_notifications">Izaziso Zokudlulisa</string>
+    <string name="view_app_permissions">Buka Izimvume Zohlelo Lokusebenza</string>
     <string name="select_language">Khetha Ulimi</string>
-    <string name="expand_language_selection">Yelula Ukukhethwa Kwelimi</string>
-    <string name="failed_to_load_student_number">Yehlulekile ukulayisha inombolo yomfundi</string>
-    <string name="student_number_updated_successfully">Inombolo yomfundi ivuselelwe ngempumelelo!</string>
-    <string name="student_number_cannot_be_empty">Inombolo yomfundi ayinakuba yize</string>
+    <string name="expand_language_selection">Yandisa ukukhethwa kolimi</string>
+    <string name="failed_to_load_student_number">Yehlulekile ukulayisha inombolo ye-student</string>
 
     <!-- Login Page Strings -->
     <string name="email">I-imeyili</string>

@@ -67,7 +67,7 @@ fun Late_Page(navController: NavController) {
             studentNumber = fetchedStudentNumber
             // Fetch lecturers based on the student number
             firestore.collection("lecturers")
-                .whereEqualTo("studentNumber", studentNumber)
+                .whereEqualTo("stdNumber", studentNumber)
                 .get()
                 .addOnSuccessListener { querySnapshot ->
                     lecturers = querySnapshot.documents.mapNotNull { it.getString("name") }
@@ -305,7 +305,7 @@ fun Late_Page(navController: NavController) {
                                     ) {
                                         // Save data to Firestore
                                         val lateData = hashMapOf(
-                                            "studentNumber" to studentNumber,
+                                            "stdNumber" to studentNumber,
                                             "lecturer" to selectedLecturer,
                                             "reason" to selectedReason,
                                             "extraInformation" to extraInformation,

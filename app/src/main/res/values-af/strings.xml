@@ -17,20 +17,23 @@
     <string name="cancel">Kanselleer</string>
 
     <!-- Settings -->
-    <string name="settings">Instellings:</string>
+    <string name="settings">Instellings</string>
     <string name="student_information">Student Inligting</string>
-    <string name="student_number">Studentnommer</string>
-    <string name="update_student_number">Werk Studentnommer op</string>
+    <string name="student_number">Studentenommer</string>
+    <string name="update_student_number">Opdateer Studentenommer</string>
+    <string name="student_number_updated_successfully">Studentenommer suksesvol opdateer</string>
+    <string name="failed_to_update_student_number">Kon nie studentenommer opdateer nie</string>
+    <string name="failed_to_fetch_check_in_records">Kon nie inskrywing rekords kry nie</string>
+    <string name="student_number_cannot_be_empty">Studentenommer mag nie leeg wees nie</string>
+    <string name="student_number_same_as_old">Die nuwe studentenommer is dieselfde as die ou een</string>
     <string name="fingerprint">Vingerafdruk</string>
-    <string name="facial_recognition">Gesigherkenning</string>
+    <string name="facial_recognition">Gesigsherkenning</string>
     <string name="location_services">Liggingdienste</string>
     <string name="push_notifications">Stootkennisgewings</string>
-    <string name="view_app_permissions">Sien Toestemmings</string>
+    <string name="view_app_permissions">Sien Toep Wysigings</string>
     <string name="select_language">Kies Taal</string>
-    <string name="expand_language_selection">Brei Taal Keuse uit</string>
-    <string name="failed_to_load_student_number">Kon nie studentnommer laai nie</string>
-    <string name="student_number_updated_successfully">Studentnommer suksesvol opgedateer!</string>
-    <string name="student_number_cannot_be_empty">Studentnommer mag nie leeg wees nie</string>
+    <string name="expand_language_selection">Brei taalkeuse uit</string>
+    <string name="failed_to_load_student_number">Kon nie studentenommer laai nie</string>
 
     <!-- Login Page Strings -->
     <string name="email">E-pos</string>

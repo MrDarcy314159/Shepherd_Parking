@@ -172,7 +172,7 @@ fun LecturerDetailsPage() {
                                         val lecturerData = hashMapOf(
                                             "name" to lecturerName,
                                             "email" to lecturerEmail,
-                                            "studentNumber" to studentNumber
+                                            "stdNumber" to studentNumber
                                         )
 
                                         firestore.collection("lecturers")

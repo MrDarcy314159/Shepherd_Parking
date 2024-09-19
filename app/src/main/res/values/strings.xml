@@ -17,20 +17,23 @@
     <string name="cancel">Cancel</string>
 
     <!-- Settings -->
-    <string name="settings">Settings:</string>
+    <string name="settings">Settings</string>
     <string name="student_information">Student Information</string>
     <string name="student_number">Student Number</string>
     <string name="update_student_number">Update Student Number</string>
+    <string name="student_number_updated_successfully">Student number updated successfully</string>
+    <string name="failed_to_update_student_number">Failed to update student number</string>
+    <string name="failed_to_fetch_check_in_records">Failed to fetch check-in records</string>
+    <string name="student_number_cannot_be_empty">Student number cannot be empty</string>
+    <string name="student_number_same_as_old">New student number is the same as the old one</string>
     <string name="fingerprint">Fingerprint</string>
     <string name="facial_recognition">Facial Recognition</string>
     <string name="location_services">Location Services</string>
     <string name="push_notifications">Push Notifications</string>
     <string name="view_app_permissions">View App Permissions</string>
     <string name="select_language">Select Language</string>
-    <string name="expand_language_selection">Expand Language Selection</string>
+    <string name="expand_language_selection">Expand language selection</string>
     <string name="failed_to_load_student_number">Failed to load student number</string>
-    <string name="student_number_updated_successfully">Student number updated successfully!</string>
-    <string name="student_number_cannot_be_empty">Student number cannot be empty</string>
 
     <!-- Login Page Strings -->
     <string name="email">Email</string>

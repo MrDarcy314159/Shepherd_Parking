@@ -257,7 +257,7 @@ fun TrafficFeedbackPage(navController: NavController, userManager: UserManager) 
                                             "message" to message,
                                             "category" to category.name,
                                             "timestamp" to System.currentTimeMillis(),
-                                            "studentNumber" to (currentUser?.studentNumber ?: "Unknown"),
+                                            "stdNumber" to (currentUser?.studentNumber ?: "Unknown"),
                                             "location" to (currentLocation ?: "HARDCODED_LOCATION:28.0339,26.2096")
                                         )
 
@@ -335,7 +335,7 @@ fun TrafficFeedbackPage(navController: NavController, userManager: UserManager) 
                     LazyColumn {
                         items(recentUpdates) { update ->
                             UpdateItem(
-                                studentNumber = update["studentNumber"] as? String ?: "Unknown",
+                                studentNumber = update["stdNumber"] as? String ?: "Unknown",
                                 time = formatTimestamp(update["timestamp"] as? Long),
                                 message = update["message"] as? String ?: "No Message",
                                 location = getStreetName(context, update["location"] as? String ?: "Unknown Location"),
