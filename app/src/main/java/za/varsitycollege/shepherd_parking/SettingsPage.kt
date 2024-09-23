@@ -237,42 +237,6 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Fingerprint and Facial Recognition Checkboxes inside the card
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Checkbox(
-                                checked = fingerprintSettings,
-                                onCheckedChange = { fingerprintSettings = it },
-                                colors = CheckboxDefaults.colors(
-                                    checkedColor = AppColors.MintGreen,
-                                    uncheckedColor = AppColors.DarkGray
-                                )
-                            )
-                            Text(stringResource(R.string.fingerprint), color = AppColors.DarkGray)
-                        }
-
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Checkbox(
-                                checked = facialRecognition,
-                                onCheckedChange = { facialRecognition = it },
-                                colors = CheckboxDefaults.colors(
-                                    checkedColor = AppColors.MintGreen,
-                                    uncheckedColor = AppColors.DarkGray
-                                )
-                            )
-                            Text(stringResource(R.string.facial_recognition), color = AppColors.DarkGray)
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
                     // Location Services Toggle
                     Row(
                         modifier = Modifier.fillMaxWidth(),
