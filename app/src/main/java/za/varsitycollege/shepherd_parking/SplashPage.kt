@@ -22,7 +22,7 @@ import androidx.navigation.compose.rememberNavController
 fun SplashPage(navController: NavController) {
     LaunchedEffect(Unit) {
         delay(2000) // Simulate loading time, 2 seconds
-        navController.navigate("signUp") // Navigate to the SignUp page
+        navController.navigate("signUp")
     }
 
     Box(

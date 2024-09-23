@@ -61,7 +61,6 @@ fun CheckInPage(navController: NavController) {
     val afternoonString = stringResource(R.string.afternoon)
     val options = listOf(morningString, afternoonString)
 
-    // Show toast message
     LaunchedEffect(toastMessage) {
         toastMessage?.let {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
@@ -214,7 +213,6 @@ fun CheckInPage(navController: NavController) {
                 }
             }
 
-            // Main Content Section
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -226,7 +224,6 @@ fun CheckInPage(navController: NavController) {
                     modifier = Modifier.padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Displaying user info
                     Card(
                         shape = RoundedCornerShape(16.dp),
                         colors = CardDefaults.cardColors(containerColor = AppColors.MintGreen),
@@ -261,7 +258,7 @@ fun CheckInPage(navController: NavController) {
                         }
                     }
 
-                    // First dropdown for selecting Morning or Afternoon
+                    // Dropdown for selecting Morning or Afternoon
                     Box(modifier = Modifier.fillMaxWidth()) {
                         Button(
                             onClick = { showDropdown = !showDropdown },
@@ -292,7 +289,7 @@ fun CheckInPage(navController: NavController) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Conditionally display the time slots based on Morning or Afternoon selection
+                    // Time slots based on Morning or Afternoon selection
                     if (time == morningString || time == afternoonString) {
                         Box(modifier = Modifier.fillMaxWidth()) {
                             Button(
@@ -368,10 +365,8 @@ fun CheckInPage(navController: NavController) {
                                             Log.e("Firestore", "Error storing check-in data", e)
                                         }
 
-                                    // Show success toast instead of dialog
                                     toastMessage = context.getString(R.string.check_in_successful)
 
-                                    // Automatically navigate after showing the toast
                                     val handler = Handler(Looper.getMainLooper())
                                     handler.postDelayed({
                                         navController.navigate("check_in") {
@@ -381,7 +376,6 @@ fun CheckInPage(navController: NavController) {
                                         }
                                     }, 2000)
                                 } else {
-                                    // Show already checked-in toast instead of dialog
                                     toastMessage = context.getString(R.string.already_checked_in_today)
                                 }
                             }

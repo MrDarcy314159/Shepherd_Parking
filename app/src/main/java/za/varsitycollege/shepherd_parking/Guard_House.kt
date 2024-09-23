@@ -58,7 +58,7 @@ fun GuardHousePage(navController: NavController) {
     // Remember the car count state
     val carCount = remember { mutableStateOf(0) }
 
-    // dialogue for reset car count
+    // Dialogue for reset car count
     var showDialog by remember { mutableStateOf(false) }
 
     // Load initial car count from Firebase
@@ -169,7 +169,6 @@ fun GuardHousePage(navController: NavController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Main Content Card
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -184,7 +183,6 @@ fun GuardHousePage(navController: NavController) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    // Display the current car count
                     Text(
                         text = stringResource(R.string.cars_on_campus, carCount.value),
                         fontSize = 24.sp,
@@ -194,7 +192,6 @@ fun GuardHousePage(navController: NavController) {
 
                     Spacer(modifier = Modifier.height(32.dp))
 
-                    // Add Car Button
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
                             text = stringResource(R.string.add_car),

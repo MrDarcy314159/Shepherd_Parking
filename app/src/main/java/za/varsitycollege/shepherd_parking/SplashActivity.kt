@@ -25,7 +25,7 @@ class SplashActivity : ComponentActivity() {
         setContent {
             SplashPage {
                 startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-                finish() // Close the splash activity so it's not in the back stack
+                finish()
             }
         }
     }
@@ -34,7 +34,7 @@ class SplashActivity : ComponentActivity() {
 @Composable
 fun SplashPage(onTimeout: () -> Unit) {
     LaunchedEffect(Unit) {
-        delay(2000) // Simulate loading time, 2 seconds
+        delay(2000)
         onTimeout()
     }
 
@@ -53,7 +53,7 @@ fun SplashPage(onTimeout: () -> Unit) {
                 contentAlignment = Alignment.Center
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.sheep), // Replace with your actual logo resource
+                    painter = painterResource(id = R.drawable.sheep),
                     contentDescription = "App Logo",
                     modifier = Modifier.size(150.dp)
                 )

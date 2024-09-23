@@ -53,7 +53,6 @@ fun Late_Page(navController: NavController) {
         selectedReason = selectReasonString
     }
 
-    // Show toast message
     LaunchedEffect(toastMessage) {
         toastMessage?.let {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
@@ -135,7 +134,6 @@ fun Late_Page(navController: NavController) {
                 }
             }
 
-            // Main Content Section
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -155,7 +153,6 @@ fun Late_Page(navController: NavController) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Add Lecturer Button
                     OutlinedButton(
                         onClick = { navController.navigate("lecturer_details") },
                         modifier = Modifier
@@ -166,7 +163,6 @@ fun Late_Page(navController: NavController) {
                         Text(stringResource(R.string.add_lecturer))
                     }
 
-                    // Lecturer Dropdown
                     ExposedDropdownMenuBox(
                         expanded = lecturerDropdownExpanded,
                         onExpandedChange = { lecturerDropdownExpanded = !lecturerDropdownExpanded }
@@ -253,7 +249,6 @@ fun Late_Page(navController: NavController) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Extra Information TextBox
                     OutlinedTextField(
                         value = extraInformation,
                         onValueChange = { extraInformation = it },
@@ -279,7 +274,6 @@ fun Late_Page(navController: NavController) {
                         ) {
                             Button(
                                 onClick = {
-                                    // Clear the fields
                                     selectedLecturer = selectLecturerString
                                     selectedReason = selectReasonString
                                     extraInformation = ""
@@ -332,7 +326,6 @@ fun Late_Page(navController: NavController) {
                                                         )
                                                     )
                                                 }
-                                                // Use a chooser to allow the user to select the app
                                                 if (emailIntent.resolveActivity(context.packageManager) != null) {
                                                     context.startActivity(
                                                         Intent.createChooser(emailIntent, context.getString(R.string.choose_email_app))
@@ -361,7 +354,6 @@ fun Late_Page(navController: NavController) {
                 }
             }
 
-            // Success Dialog
             if (showSuccessDialog) {
                 Dialog(onDismissRequest = { showSuccessDialog = false }) {
                     Card(

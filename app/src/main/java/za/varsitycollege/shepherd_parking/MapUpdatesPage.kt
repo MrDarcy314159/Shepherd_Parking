@@ -48,7 +48,6 @@ fun MapUpdatesPage(navController: NavController) {
     val errorLoadingText = stringResource(id = R.string.error_loading_feedback)
     val feedbackTitleTemplate = stringResource(id = R.string.feedback_from)
 
-    // These variables should be managed by state
     var feedbackMarkers by remember { mutableStateOf<List<FeedbackMarker>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }

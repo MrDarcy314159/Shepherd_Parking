@@ -101,9 +101,7 @@ fun SignUpPage(navController: NavController) {
                         // Convert Google user to app User and save their details
                         userManager.convertFirebaseUser(user) { appUser: User? ->
                             if (appUser != null) {
-                                // Prompt for student number if needed, or proceed as usual
                                 if (appUser.studentNumber.isEmpty()) {
-                                    // Prompt user to enter their student number
                                 }
                             }
                         }

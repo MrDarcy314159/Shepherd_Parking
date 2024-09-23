@@ -50,7 +50,6 @@ fun HomePage(navController: NavController, userManager: UserManager) {
 
     val context = LocalContext.current
 
-    // Show toast message
     LaunchedEffect(toastMessage) {
         toastMessage?.let {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()

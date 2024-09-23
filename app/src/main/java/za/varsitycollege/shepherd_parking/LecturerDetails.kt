@@ -60,7 +60,6 @@ fun LecturerDetailsPage() {
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Top Bar Section
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -102,7 +101,6 @@ fun LecturerDetailsPage() {
                 }
             }
 
-            // Main Content Section
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -200,7 +198,6 @@ fun LecturerDetailsPage() {
 
                         Spacer(modifier = Modifier.width(16.dp))
 
-                        // Lecturer Icon to the right of the buttons
                         Image(
                             painter = painterResource(id = R.drawable.lecturer_icon),
                             contentDescription = stringResource(R.string.lecturer_icon_description),
@@ -212,7 +209,6 @@ fun LecturerDetailsPage() {
         }
     }
 
-    // Success Dialog
     if (showSuccessDialog) {
         CustomDialog(
             onDismissRequest = { showSuccessDialog = false },
@@ -221,7 +217,6 @@ fun LecturerDetailsPage() {
         )
     }
 
-    // Error Dialog
     if (showErrorDialog) {
         CustomDialog(
             onDismissRequest = { showErrorDialog = false },

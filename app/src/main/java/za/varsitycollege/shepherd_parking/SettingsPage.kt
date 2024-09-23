@@ -35,7 +35,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsPage(navController: NavController, userManager: UserManager) {
-    var studentNumber by remember { mutableStateOf("ST10000001") } // Default value until fetched
+    var studentNumber by remember { mutableStateOf("ST10000001") }
     var oldStudentNumber by remember { mutableStateOf("") }
     var facialRecognition by remember { mutableStateOf(false) }
     var fingerprintSettings by remember { mutableStateOf(false) }
@@ -53,7 +53,6 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
 
     val languages = listOf("en" to "English", "af" to "Afrikaans", "zu" to "Zulu")
 
-    // Show toast message
     LaunchedEffect(toastMessage) {
         toastMessage?.let {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
@@ -108,9 +107,8 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                     }
             }
 
-            // Show success message when done
             toastMessage = context.getString(R.string.student_number_updated_successfully)
-            oldStudentNumber = newStudentNumber // Update the oldStudentNumber reference
+            oldStudentNumber = newStudentNumber
         } else if (newStudentNumber.isBlank()) {
             toastMessage = context.getString(R.string.student_number_cannot_be_empty)
         } else {
@@ -171,7 +169,6 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Settings Page Header
             Text(
                 text = stringResource(R.string.settings),
                 style = MaterialTheme.typography.headlineMedium,
@@ -181,7 +178,6 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
 
             Spacer(modifier = Modifier.height(5.dp))
 
-            // Student Information Section with Update Button and other settings inside the same card
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -199,7 +195,6 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
 
-                    // Student Number Input
                     OutlinedTextField(
                         value = studentNumber,
                         onValueChange = { studentNumber = it },
@@ -213,7 +208,6 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Update Button
                     Button(
                         onClick = {
                             val email = userManager.getCurrentUserEmail()
@@ -237,7 +231,6 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Location Services Toggle
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
@@ -259,7 +252,6 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Push Notifications Toggle
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
@@ -284,7 +276,7 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                     // View App Permissions Button (opens App Info)
                     Button(
                         onClick = {
-                            openAppInfo() // Opens the app info screen
+                            openAppInfo()
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = AppColors.MintGreen,
@@ -330,7 +322,6 @@ fun SettingsPage(navController: NavController, userManager: UserManager) {
                                         selectedLanguage = code
                                         languageManager.setLanguage(code)
                                         expandedDropdown = false
-                                        // Recreate the activity to apply language change
                                         (context as? MainActivity)?.recreate()
                                     }
                                 )

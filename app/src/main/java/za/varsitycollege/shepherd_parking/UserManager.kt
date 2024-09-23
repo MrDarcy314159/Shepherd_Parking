@@ -85,19 +85,17 @@ open class UserManager(
                     // Create a User object from Firestore data
                     val user = User(
                         email = email,
-                        password = "", // Google users won't have a password
+                        password = "",
                         name = document.getString("name") ?: "",
                         surname = document.getString("surname") ?: "",
                         studentNumber = document.getString("studentNumber") ?: ""
                     )
                     callback(user)
                 } else {
-                    // Return null if no document is found
                     callback(null)
                 }
             }
             .addOnFailureListener {
-                // Return null on failure
                 callback(null)
             }
     }
@@ -107,13 +105,12 @@ open class UserManager(
             if (user != null) {
                 callback(user)
             } else {
-                // If no user found in Firestore, create one based on FirebaseUser (Google login)
                 val defaultUser = User(
                     email = firebaseUser.email ?: "",
                     password = "", // No password for Google users
                     name = firebaseUser.displayName?.split(" ")?.getOrNull(0) ?: "",
                     surname = firebaseUser.displayName?.split(" ")?.getOrNull(1) ?: "",
-                    studentNumber = "" // Optionally prompt Google users to enter this manually
+                    studentNumber = ""
                 )
                 saveUser(firebaseUser, defaultUser.name, defaultUser.surname, defaultUser.studentNumber)
                 callback(defaultUser)

@@ -59,7 +59,7 @@ fun LoginPage(navController: NavController) {
 
     // Check if user is offline and already logged in, then log in automatically
     LaunchedEffect(Unit) {
-        val isOffline = !isOnline(context) // Check if the device is offline
+        val isOffline = !isOnline(context)
         if (isOffline && userPreferences.isLoggedIn()) {
             // If offline and user is logged in, auto-login the last user
             val userEmail = userPreferences.getLoggedInUserEmail()
@@ -71,7 +71,7 @@ fun LoginPage(navController: NavController) {
         }
     }
 
-    // Display the login form if the user is online or hasn't logged in before
+    // Display the login form if the user is online
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -126,7 +126,6 @@ fun LoginPage(navController: NavController) {
                 }
             }
 
-            // Login form Card
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -237,7 +236,6 @@ fun LoginPage(navController: NavController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Biometric login button
             Button(onClick = {
                 val intent = Intent(context, BiometricActivity::class.java)
                 biometricLauncher.launch(intent)
@@ -246,7 +244,6 @@ fun LoginPage(navController: NavController) {
             }
         }
 
-        // Varsity College logo at the bottom
         Image(
             painter = painterResource(id = R.drawable.varsity_college_icon),
             contentDescription = stringResource(R.string.varsity_college_logo_description),

@@ -130,7 +130,6 @@ fun NewUserPage(navController: NavController) {
                 }
             }
 
-            // Sign-up form Card
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -289,7 +288,6 @@ fun NewUserPage(navController: NavController) {
             }
         }
 
-        // Varsity College logo
         Image(
             painter = painterResource(id = R.drawable.varsity_college_icon),
             contentDescription = stringResource(R.string.varsity_college_logo),

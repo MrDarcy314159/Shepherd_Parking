@@ -149,7 +149,6 @@ fun ApiTestPage(navController: NavController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // API Data Card
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
@@ -175,7 +174,6 @@ fun ApiTestPage(navController: NavController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Text Box and Button
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
@@ -222,7 +220,6 @@ fun ApiTestPage(navController: NavController) {
 
         val context = LocalContext.current
 
-        // Varsity College logo at the bottom
         Image(
             painter = painterResource(id = R.drawable.varsity_college_icon),
             contentDescription = "Varsity College Logo",
