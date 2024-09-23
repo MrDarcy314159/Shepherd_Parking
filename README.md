@@ -1,7 +1,63 @@
 # Shepherd Parking Android App
+![image (2)](https://github.com/user-attachments/assets/8bb5a834-7ed7-4f28-88ca-065ee172d139)
 
 ## Overview
-Shepherd Parking is an innovative Android application designed to address the parking challenges at Varsity College Sandton. It provides real-time parking information and various features to help students and staff make informed decisions about parking and commuting to campus.
+Shepherd Parking is an innovative Android application designed to address the parking challenges at Varsity College Sandton. It provides real-time parking information and various features to help students and staff make informed decisions about parking and commuting to campus. 
+### The primary goals of the application are:
+1. To provide real-time parking availability information to students and staff.
+2. To reduce stress and time wasted in searching for parking spots.
+3. To improve overall campus traffic flow and parking efficiency.
+4. To enable users to make informed decisions about their commute before leaving home.
+
+By offering features such as real-time vehicle tracking, parking projections, and traffic updates, Shepherd Parking aims to streamline the parking process and enhance the overall campus experience.
+
+### Design Considerations
+Several key design considerations were taken into account during the development of Shepherd Parking:
+
+User-Centric Approach:
+
+Intuitive interface for easy navigation and quick access to critical information.
+Personalized features like check-in systems and tardiness notifications to cater to individual user needs.
+
+
+Real-Time Data Processing:
+
+Implementation of efficient data synchronization to provide up-to-date parking information.
+Use of Firebase Realtime Database for instant updates across all user devices.
+
+
+Scalability:
+
+Modular architecture to allow for easy addition of new features or expansion to other campuses.
+Use of cloud-based services to handle increasing user loads.
+
+
+Security and Privacy:
+
+Implementation of secure authentication methods, including Google Sign-In.
+Careful handling of user data in compliance with privacy regulations.
+
+
+Cross-Functional Integration:
+
+Seamless integration with Google Maps for location-based services.
+Incorporation of push notification systems for timely updates.
+
+
+Offline Functionality:
+
+Basic app functionality maintained even in low-connectivity situations.
+
+
+Accessibility:
+
+Design considerations for users with disabilities, including screen reader compatibility.
+
+
+Performance Optimization:
+
+Efficient coding practices to ensure smooth operation on a wide range of Android devices.
+
 
 ## Key Features
 
@@ -107,6 +163,54 @@ Shepherd Parking is an innovative Android application designed to address the pa
 - Data Persistence: Firebase Realtime Database and Firestore
 - Authentication: Firebase Authentication with Google Sign-In integration
 
+## Utilization of GitHub and GitHub Actions
+GitHub plays a crucial role in the development and maintenance of Shepherd Parking:
+
+#### Version Control:
+
+Utilization of Git for tracking changes in the source code.
+Branch management for feature development, bug fixes, and releases.
+
+
+#### Collaboration:
+
+Use of Pull Requests for code reviews and team collaboration.
+Issue tracking for bug reports, feature requests, and project management.
+
+
+#### Documentation:
+
+Hosting of project documentation, including this README, directly in the repository.
+Use of Wiki for more extensive documentation and guides.
+
+
+#### GitHub Actions:
+
+Automated CI/CD pipeline for building, testing, and deploying the app.
+Workflow examples:
+a. Automatically building the app on each push to the main branch.
+b. Running unit and integration tests before merging pull requests.
+c. Generating and uploading APK artifacts for easy testing.
+d. Automated deployment to Google Play Store for beta and production releases.
+
+![image (1)](https://github.com/user-attachments/assets/be2f00ee-aa88-4536-85de-31c2a9632582)
+
+
+
+#### Security:
+
+Regular automated security scans using GitHub's dependency graph and Dependabot alerts.
+Secret management for storing sensitive information like API keys securely.
+
+
+#### Project Management:
+
+Use of GitHub Projects for Agile development, including sprint planning and tracking.
+Milestones for tracking progress towards major releases.
+
+
+
+By leveraging these GitHub features and GitHub Actions, we ensure a streamlined development process, maintain high code quality, and facilitate efficient collaboration among team members.
 ## API Design
 The app uses two APIs:
 
@@ -161,4 +265,7 @@ The app manages various data types, including:
 3. Commit your changes
 4. Push to your branch
 5. Create a new Pull Request
+
+![image](https://github.com/user-attachments/assets/91890523-4ad3-4671-a97e-35265a648a4a)
+
 
